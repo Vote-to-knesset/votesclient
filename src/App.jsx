@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   createBrowserRouter,
   RouterProvider,
@@ -6,13 +6,42 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 import BillsFeed from "./components/BillsFeed";
+import UserIdentity from "./components/UserIdentity";
+import axios from 'axios';
 
-const billsData = [{"BillID": "2208258", "name": "הצעת חוק להטמעת מורשת יהדות ספרד והמזרח במערכת החינוך וההשכלה הגבוהה, התשפ\"ג-2023", "SummaryLaw": "", "LastUpdatedDate": "2023-07-24T09:07:40.577", "document": "https://fs.knesset.gov.il/25/law/25_lst_2957899.docx", "present": "כהן מאיר", "total_vote": 3, "in_favor": 3, "against": 0}, {"BillID": "2160142", "name": "חוק לתיקון פקודת האגודות השיתופיות (מס' 12), התשפ\"ג–2023", "SummaryLaw": "", "LastUpdatedDate": "2023-07-31T08:34:34.513", "document": "https://fs.knesset.gov.il//24/law/24_lst_604990.docx", "present": "השכל שרן מרים", "total_vote": 0, "in_favor": 0, "against": 0}, {"BillID": "2156160", "name": "הצעת חוק הביטוח הלאומי (תיקון מס' 232) (מסלול ברירת מחדל בהפקדות לחיסכון ארוך טווח לילד), התשפ\"ב–2022", "SummaryLaw": "", "LastUpdatedDate": "2023-04-27T10:59:53.107", "document": "https://fs.knesset.gov.il//24/law/24_lst_600590.docx", "present": "אזולאי ינון", "total_vote": 0, "in_favor": 0, "against": 0}, {"BillID": "2163229", "name": "הצעת חוק הרשות הלאומית לביטחון קהילתי (תיקון מס' 2), התשפ\"ג-2023", "SummaryLaw": "", "LastUpdatedDate": "2023-10-10T13:25:07.447", "document": "https://fs.knesset.gov.il//24/law/24_ls1_608678.pdf", "present": "", "total_vote": 0, "in_favor": 0, "against": 0}, {"BillID": "2189724", "name": "הצעת חוק התקשורת (בזק ושידורים) (תיקון מס' 76) (הגבלות מוסכמות על שירות תקשורת וציוד תקשורת), התשפ\"ב–2022", "SummaryLaw": "", "LastUpdatedDate": "2023-02-28T07:51:29.113", "document": "https://fs.knesset.gov.il//24/law/24_lst_622199.docx", "present": "אזולאי ינון", "total_vote": 0, "in_favor": 0, "against": 0}, {"BillID": "2190321", "name": "הצעת חוק הארכת השעיה של עובד המדינה ופיטורים של עובד הוראה לשם הגנה על קטין או חסר ישע (תיקוני חקיקה), התשפ\"ב–2022\t\t", "SummaryLaw": "", "LastUpdatedDate": "2023-05-02T08:55:44.267", "document": "https://fs.knesset.gov.il//24/law/24_lst_622203.docx", "present": "השכל שרן מרים", "total_vote": 0, "in_favor": 0, "against": 0}, {"BillID": "2165539", "name": "הצעת חוק הטיס (תיקון מס' 3), התשפ\"ג-2023", "SummaryLaw": "", "LastUpdatedDate": "2023-10-10T13:25:03.353", "document": "https://fs.knesset.gov.il//24/law/24_ls1_612503.pdf", "present": "", "total_vote": 0, "in_favor": 0, "against": 0}]
+async function getBills() {
+  try {
+    const response = await axios.get('http://127.0.0.1:5000/api/data_bills');
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}
+const options = [
+  { value: 'option1', label: 'Option 1' },
+  { value: 'option2', label: 'Option 2' },
+  { value: 'option3', label: 'Option 3' },
+];
+let billsss = [{"BillID": "2211110", "Name": "הצעת חוק התוכנית לסיוע כלכלי (הוראת שעה – חרבות ברזל), התשפ\"ד-2023", "SummaryLaw": "", "LastUpdatedDate": "2023-11-08T10:55:41.343", "document": "https://fs.knesset.gov.il/25/law/25_ls1_3479300.pdf", "present": "", "total_vote": 0, "in_favor": 0, "against": 0}, {"BillID": "2211293", "Name": "הצעת חוק הביטוח הלאומי (הוראת שעה – חרבות ברזל) (תגמולים למשרתים במילואים), התשפ\"ד-2023", "SummaryLaw": "", "LastUpdatedDate": "2023-11-08T10:50:50.577", "document": "https://fs.knesset.gov.il/25/law/25_ls1_3508896.pdf", "present": "", "total_vote": 0, "in_favor": 0, "against": 0}, {"BillID": "2211218", "Name": "הצעת חוק העברת מידע לצורך זיהוי או אימות זהות של אדם לרבות גופה, ואיתור נעדר או שבוי, הנדרשים בשל פעולות האיבה או פעולות המלחמה (הוראות שעה – חרבות ברזל), התשפ\"ד-2023", "SummaryLaw": "", "LastUpdatedDate": "2023-11-08T10:45:31.683", "document": "https://fs.knesset.gov.il/25/law/25_ls1_3500878.pdf", "present": "", "total_vote": 0, "in_favor": 0, "against": 0}, {"BillID": "2210979", "Name": "הצעת חוק איסור הלבנת הון (תיקון מס' 33), התשפ\"ד-2023", "SummaryLaw": "", "LastUpdatedDate": "2023-11-08T10:43:02.377", "document": "", "present": "", "total_vote": 0, "in_favor": 0, "against": 0}, {"BillID": "2211197", "Name": "הצעת חוק הארכת תקופות ודחיית מועדים (הוראת שעה – חרבות ברזל) (החלטות מינהליות ופעולות כלפי רשות ציבורית, אומנה לילדים, תקופות כהונה תאגידים, בתי דין מינהליים ותכנון ובנייה), התשפ\"ד-2023", "SummaryLaw": "", "LastUpdatedDate": "2023-11-08T10:37:22.01", "document": "https://fs.knesset.gov.il/25/law/25_ls1_3500877.pdf", "present": "", "total_vote": 0, "in_favor": 0, "against": 0}, {"BillID": "2210817", "Name": "הצעת חוק המאבק בטרור (תיקון מס' 9 והוראת שעה) (צריכת פרסומי טרור), התשפ\"ד-2023", "SummaryLaw": "", "LastUpdatedDate": "2023-11-08T07:17:30.657", "document": "https://fs.knesset.gov.il/25/law/25_ls1_3449308.pdf", "present": "", "total_vote": 0, "in_favor": 0, "against": 0}, {"BillID": "2211246", "Name": "הצעת חוק הארכת תקופות ודחיית מועדים (הוראת שעה – חרבות ברזל) (החלטות מינהליות ופעולות כלפי רשות ציבורית, אומנה לילדים, תקופות כהונה תאגידים, בתי דין מינהליים ותכנון ובנייה), התשפ\"ד-2023 - הארכת תקופות ודחיית מועדים לפי חוק אומנה לילדים", "SummaryLaw": "", "LastUpdatedDate": "2023-11-07T23:00:59.51", "document": "", "present": "", "total_vote": 0, "in_favor": 0, "against": 0}, {"BillID": "2210669", "Name": "חוק תגמולים לבני משפחה של חטופים ונעדרים בפעולת איבה, התשפ\"ד–2023", "SummaryLaw": "", "LastUpdatedDate": "2023-11-07T19:31:15.657", "document": "https://fs.knesset.gov.il/25/law/25_lst_3442679.docx", "present": "אייכלר ישראל", "total_vote": 0, "in_favor": 0, "against": 0}]
+
 function App() {
+  const [bills, setBills] = useState([]);
+
+  useEffect(() => {
+    const fetchBills = async () => {
+      const data = await getBills();
+      setBills(data);
+    };
+
+    fetchBills();
+  }, []);
+  
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" >
-        <Route path="billsFeed" element={<BillsFeed bills={billsData} />}></Route>
+        <Route path="userIdentity" element={<UserIdentity options={options}/>}></Route>
+        <Route path="billsFeed" element={<BillsFeed bills={billsss} />}></Route>
 
       </Route>
     )
