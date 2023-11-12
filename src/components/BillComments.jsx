@@ -82,7 +82,7 @@ const billsComments = {
           ))}
         </div>
   
-        <div className="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-300 dark:border-gray-200 rounded-full">
+        <div className="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-300 dark:border-gray-200 ">
           <label htmlFor="comment" className="sr-only">
             Your comment
           </label>

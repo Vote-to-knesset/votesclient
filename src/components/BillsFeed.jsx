@@ -12,12 +12,15 @@ function calculateVoteData(bill) {
   return { in_favor: inFavor, against: against };
 }
 
-function BillsFeed({ bills }) {
-    console.log(bills)
+function BillsFeed({ bills}) {
   const [selectedBills, setSelectedBills] = useState([]);
   const [comment1,setComment1] = useState('')
   const [openComments, setOpenComments] = useState({}); 
   
+
+
+
+
   const handleVoteClickFor = (bill) => {
     bill.in_favor += 1;
     setSelectedBills([...selectedBills, bill]);
