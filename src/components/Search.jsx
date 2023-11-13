@@ -2,12 +2,10 @@ import * as React from "react";
 import { useState } from "react";
 
 function Search({ onSearch }) {
-  const [isSearchOpen, setSearchOpen] = useState(true);
   const [searchValue, setSearchValue] = useState("");
+  
 
-  const toggleSearch = () => {
-    setSearchOpen(!isSearchOpen);
-  };
+
 
   const handleInputChange = (e) => {
     setSearchValue(e.target.value);
@@ -16,7 +14,8 @@ function Search({ onSearch }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSearch(searchValue);
+    onSearch( searchValue);
+    
 };
 
   return (

@@ -12,7 +12,7 @@ function calculateVoteData(bill) {
   return { in_favor: inFavor, against: against };
 }
 
-function BillsFeed({ bills}) {
+function BillsFeed({ bills,onSearch}) {
   const [selectedBills, setSelectedBills] = useState([]);
   const [comment1,setComment1] = useState('')
   const [openComments, setOpenComments] = useState({}); 
@@ -42,7 +42,7 @@ function BillsFeed({ bills}) {
 
   return (
     <div>
-      <Header />
+      <Header onSearch={onSearch} />
       <div dir="rtl" className="bill-feed overflow-y-auto p-4 h-[600px] text-white bg-gray-300">
         {bills.map((bill) => (
           <div key={bill.BillID} className=" bg-gray-600 rounded p-4 m-4 shadow-lg">
