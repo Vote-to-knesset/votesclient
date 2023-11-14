@@ -5,24 +5,16 @@ import BillsFeed from "./BillsFeed";
 
 
 
-function Header({ onSearch }) {
-
-
-    const [biilsFeed,setBillsFeed] = useState(false)
+function Header() {
 
     const [userDetails,setUserDetails] = useState(false)
-
-    const handleSerche = (e) => {
-        e.preventDefault();
-        onSearch('');
-    }
 
 
   return (
     <header className="bg-blue-800 p-4 text-white flex justify-between items-center">
       <div className="flex items-center">
         <button className="mr-4"
-        onClick={() => setUserDetails(true)}>
+        onClick={() => setUserDetails(!userDetails)}>
           <svg
             viewBox="0 0 24 24"
             fill="currentColor"
@@ -33,11 +25,11 @@ function Header({ onSearch }) {
             <path d="M12 6a3.91 3.91 0 00-4 4 3.91 3.91 0 004 4 3.91 3.91 0 004-4 3.91 3.91 0 00-4-4zm0 6a1.91 1.91 0 01-2-2 1.91 1.91 0 012-2 1.91 1.91 0 012 2 1.91 1.91 0 01-2 2z" />
           </svg>
         </button>
-        <Search onSearch={onSearch}  />
+        <Search  />
       </div>
      
         <button className="mr-4 ml-8"
-        onClick={handleSerche}>
+        >
           <svg
             viewBox="0 0 24 24"
             fill="currentColor"
