@@ -10,6 +10,7 @@ import BillsFeed from "./components/BillsFeed";
 
 import axios from "axios";
 import Header from "./components/Header";
+import LoginPage from "./components/LoginPage";
 async function getBills() {
   try {
     const response = await axios.get("http://127.0.0.1:5000/api/data_bills");
@@ -134,6 +135,7 @@ function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/">
+        <Route path="login" element={<LoginPage/>} />
         <Route path="billsFeed" element={<BillsFeed bills={filteredBills} onSearch={handleSearch}/>} />
       </Route>
     )

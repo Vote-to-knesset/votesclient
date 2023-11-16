@@ -51,7 +51,6 @@ const billsComments = {
     const handleAddComment = (e) => {
       if (e.key === 'Enter' && comment) {
         addComment({
-          id: comments.length + 1, 
           text: comment,
           author: "UserX", 
           timestamp: new Date().toISOString(), 
@@ -68,7 +67,7 @@ const billsComments = {
       <div>
         <div className="comments overflow-y-auto p-4 h-[200px]">
           {comments.map((comment) => (
-            <div className="bg-gray-100 p-2" key={comment.id}>
+            <div className="bg-gray-100 p-2" >
               <div className="flex flex-col space-y-6">
                 <div className="bg-white p-1 rounded-lg shadow-md">
                   <h3 className="text-lg font-bold">{comment.author}</h3>
