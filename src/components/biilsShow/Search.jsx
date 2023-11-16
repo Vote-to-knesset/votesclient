@@ -1,4 +1,4 @@
-import { useSearchTerm } from "../../atoms/atomBills";
+import { useSearchTerm } from "../../../atoms/atomBills";
 
 function Search() {
   const [searchTerm,setSearchTerm] = useSearchTerm()
