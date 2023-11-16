@@ -1,19 +1,22 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+
+import axios from "axios";
+
 import {
   createBrowserRouter,
   RouterProvider,
   Route,
   createRoutesFromElements,
 } from "react-router-dom";
-import Search from "./components/Search";
-import BillsFeed from "./components/BillsFeed";
 
-import useBills from '../atoms/atomBills.js'
+import useBills from "../atoms/atomBills.js";
 // test
 import dbTest from "../db/dbTest.js";
 
-import axios from "axios";
-import Header from "./components/Header";
+// components
+import LoginPage from "./components/connctWebPages/loginPage.jsx";
+import BillsFeed from "./components/biilsShow/BillsFeed.jsx";
+
 async function getBills() {
   try {
     const response = await axios.get("http://127.0.0.1:5000/api/data_bills");
@@ -24,11 +27,10 @@ async function getBills() {
   }
 }
 
-
 function App() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [bills,setBills] = useBills()
-  setBills(dbTest)
+  const [bills, setBills] = useBills();
+  setBills(dbTest);
 
   useEffect(() => {
     const fetchBills = async () => {
@@ -39,21 +41,17 @@ function App() {
     fetchBills();
   }, []);
 
-  
-  
-  
-
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/">
-        <Route path="billsFeed" element={<BillsFeed/>} />
+        <Route index element={<LoginPage />} />
+        <Route path="billsFeed" element={<BillsFeed />} />
       </Route>
     )
   );
   return (
     <div>
       <RouterProvider router={router} />
-
     </div>
   );
 }

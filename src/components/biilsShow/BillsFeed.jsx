@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import Header from './Header';
 import GraphVotes from './GraphVotes';
 import BillComments from './BillComments';
-import useBills from '../../atoms/atomBills'
-import { useSearchTerm } from '../../atoms/atomBills';
+import useBills from '../../../atoms/atomBills'
+import { useSearchTerm } from '../../../atoms/atomBills';
 
 
 
