@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import Header from './Header';
 import GraphVotes from './GraphVotes';
 import BillComments from './BillComments';
-
+import useBills from '../../atoms/atomBills'
+import { useSearchTerm } from '../../atoms/atomBills';
 
 
 
@@ -12,10 +13,12 @@ function calculateVoteData(bill) {
   return { in_favor: inFavor, against: against };
 }
 
-function BillsFeed({ bills,onSearch}) {
+function BillsFeed() {
   const [selectedBills, setSelectedBills] = useState([]);
   const [comment1,setComment1] = useState('')
   const [openComments, setOpenComments] = useState({}); 
+  const [bills] = useBills()
+  const [searchTerm] = useSearchTerm()
   
 
 
@@ -38,13 +41,15 @@ function BillsFeed({ bills,onSearch}) {
       [bill.BillID]: !prevComments[bill.BillID],
     }));
   };
- 
+  const filteredBills = bills.filter((bill) =>
+  bill.Name.includes(searchTerm)
+);
 
   return (
     <div>
-      <Header onSearch={onSearch} />
+      <Header />
       <div dir="rtl" className="bill-feed overflow-y-auto p-4 h-[600px] text-white bg-gray-300">
-        {bills.map((bill) => (
+        {filteredBills.map((bill) => (
           <div key={bill.BillID} className=" bg-gray-600 rounded p-4 m-4 shadow-lg">
             <h3 className="text-xl font-semibold mb-2">{bill.name ||bill.Name}</h3>
             {bill.SummaryLaw && <p>{bill.SummaryLaw}</p>}
