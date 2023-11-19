@@ -12,7 +12,7 @@ import useBills from "../atoms/atomBills.js";
 import dbTest from "../db/dbTest.js";
 import LoginPage from "./components/connctWebPages/loginPage.jsx";
 import BillsFeed from "./components/biilsShow/BillsFeed.jsx";
-
+import MainApp from "./components/sign-up/MainApp.jsx";
 
 
 async function getBills() {
@@ -45,6 +45,8 @@ function App() {
       <Route path="/">
         <Route index element={<LoginPage />} />
         <Route path="billsFeed" element={<BillsFeed />} />
+        <Route path="choice" element={<MainApp />} />
+
       </Route>
     )
   );

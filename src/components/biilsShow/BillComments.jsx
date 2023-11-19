@@ -9,7 +9,7 @@ function BillComment({ billId }) {
   useEffect(() => {
     async function fetchComments() {
       try {
-        const response = await axios.get("https://kns-data-votes.onrender.com/api/get_comments", {
+        const response = await axios.get("https://kns-data-votes..onrender.com/api/get_comments", {
           params: {
             billId: billId
           }
