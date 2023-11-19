@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 class LoginForm extends Component {
   constructor(props) {
@@ -16,14 +17,29 @@ class LoginForm extends Component {
     this.setState({ [id]: value });
   };
 
-  handleSubmit = (event) => {
+  handleSubmit = async (event) => {
     event.preventDefault();
 
     const { username, password } = this.state;
 
     if (username.trim() !== '' && password.trim() !== '') {
-      this.setState({ serverResponse: 'Login Successful!', isSubmitted: true });
-  
+      try {
+        const response = await axios.post('http://localhost:5050/users/login', {
+          username,
+          password,
+        });
+
+        if (response.status === 200) {
+
+          this.setState({ serverResponse: 'Login Successful!', isSubmitted: true });
+        } else {
+
+          this.setState({ serverResponse: 'Login Failed. Please try again.' });
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        this.setState({ serverResponse: 'An error occurred. Please try again later.' });
+      }
     } else {
       this.setState({ serverResponse: 'Please enter username and password', isSubmitted: true });
     }

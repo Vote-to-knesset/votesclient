@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import Header from './Header';
 import GraphVotes from './GraphVotes';
 import BillComments from './BillComments';
-import useBills from '../../atoms/atomBills'
-import { useSearchTerm } from '../../atoms/atomBills';
+import useBills from '../../../atoms/atomBills'
+import { useSearchTerm } from '../../../atoms/atomBills';
 
 
 
@@ -42,8 +42,8 @@ function BillsFeed() {
     }));
   };
   const filteredBills = bills.filter((bill) =>
-  bill.Name.includes(searchTerm)
-);
+  (bill.name && bill.name.includes(searchTerm)) || (bill.Name && bill.Name.includes(searchTerm)))
+
 
   return (
     <div>

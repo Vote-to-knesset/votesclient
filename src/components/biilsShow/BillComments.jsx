@@ -1,67 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+function BillComment({ billId }) {
+  const [comment, setComment] = useState('');
+  const [comments, setComments] = useState([]);
 
 
-const billsComments = {
-    "2208258": [
-      {
-        "id": 1,
-        "text": "This is the first comment.",
-        "author": "User1",
-        "timestamp": "2023-11-07T14:30:00Z"
-      },
-      {
-        "id": 2,
-        "text": "Another comment here.",
-        "author": "User2",
-        "timestamp": "2023-11-07T15:15:00Z"
-      },
-      {
-        "id": 3,
-        "text": "A third comment by User3.",
-        "author": "User3",
-        "timestamp": "2023-11-07T16:00:00Z"
-      }
-    ],"2160142": [
-        {
-          "id": 1,
-          "text": "This is the first comment.",
-          "author": "User1",
-          "timestamp": "2023-11-07T14:30:00Z"
-        },
-        {
-          "id": 2,
-          "text": "Another comment here.",
-          "author": "User2",
-          "timestamp": "2023-11-07T15:15:00Z"
-        },
-        {
-          "id": 3,
-          "text": "A third comment by User3.",
-          "author": "User3",
-          "timestamp": "2023-11-07T16:00:00Z"
-        }
-      ]
-  }
-  
-
-  function BillComment({ billId }) {
-    const [comment, setComment] = useState('');
-    const comments = billsComments[billId] || [];
-  
-    const handleAddComment = (e) => {
-      if (e.key === 'Enter' && comment) {
-        addComment({
-          text: comment,
-          author: "UserX", 
-          timestamp: new Date().toISOString(), 
+  useEffect(() => {
+    async function fetchComments() {
+      try {
+        const response = await axios.get("https://kns-data-votes.onrender.com/api/get_comments", {
+          params: {
+            billId: billId
+          }
         });
-        setComment('');
+        console.log(response.data);
+        setComments(response.data || []);
+      } catch (error) {
+        console.error(error);
       }
-    };
+    }
   
-    const addComment = (newComment) => {
-      comments.unshift(newComment);
-    };
+    fetchComments();
+  }, [billId]);
+
+  const handleAddComment = async (e) => {
+    if (e.key === 'Enter' && comment) {
+      const newComment = {
+        text: comment,
+        author: "UserX",
+        timestamp: new Date().toISOString(),
+      };
+
+      // try {
+      //   await axios.post("https://kns-data-votes.onrender.com/api/add_comment", {
+      //     billId,
+      //     comment: newComment,
+      //   });
+
+
+        setComments([newComment, ...comments]);
+        setComment('');
+      // } catch (error) {
+      //   console.error(error);
+      // }
+    }
+  };
   
     return (
       <div>

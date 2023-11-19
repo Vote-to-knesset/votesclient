@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+
+import axios from "axios";
+
 import {
   createBrowserRouter,
   RouterProvider,
   Route,
   createRoutesFromElements,
 } from "react-router-dom";
-import Search from "./components/Search";
-import BillsFeed from "./components/BillsFeed";
-
-import useBills from '../atoms/atomBills.js'
-// test
+import useBills from "../atoms/atomBills.js";
 import dbTest from "../db/dbTest.js";
+import LoginPage from "./components/connctWebPages/loginPage.jsx";
+import BillsFeed from "./components/biilsShow/BillsFeed.jsx";
 
-import axios from "axios";
-import Header from "./components/Header";
-import LoginPage from "./components/LoginPage";
+
+
 async function getBills() {
   try {
-    const response = await axios.get("http://127.0.0.1:5000/api/data_bills");
+    const response = await axios.get("https://kns-data-votes.onrender.com/api/data_bills");
     return response.data;
   } catch (error) {
     console.error(error);
@@ -25,37 +25,32 @@ async function getBills() {
   }
 }
 
-
 function App() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [bills,setBills] = useBills()
-  setBills(dbTest)
+  const [bills, setBills] = useBills();
+  // setBills(dbTest);
 
   useEffect(() => {
     const fetchBills = async () => {
       const data = await getBills();
+      
       setBills(data);
     };
 
     fetchBills();
   }, []);
 
-  
-  
-  
-
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/">
-        <Route path="login" element={<LoginPage/>} />
-        <Route path="billsFeed" element={<BillsFeed bills={filteredBills} onSearch={handleSearch}/>} />
+        <Route index element={<LoginPage />} />
+        <Route path="billsFeed" element={<BillsFeed />} />
       </Route>
     )
   );
   return (
     <div>
       <RouterProvider router={router} />
-
     </div>
   );
 }
