@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
 import useUserDetails from "../../../atoms/atomUser";
+import { useNavigate } from "react-router-dom";
+
 
 const RegistrationForm = () => {
   const [userDetails, setUserDetails] = useUserDetails();
+  const navigatRegister = useNavigate()
 
   const [state, setState] = useState({
     email: "",
@@ -74,7 +77,7 @@ const RegistrationForm = () => {
       );
 
       if (response.status === 200) {
-        setUserDetails({ ...userDetails, code: code });
+        setUserDetails({ ...userDetails, emailCode: code });
         setState({
           ...state,
           serverResponse: "Verification Successful!",
@@ -106,8 +109,8 @@ const RegistrationForm = () => {
       );
 
       if (response.status === 200) {
-        setUserDetails({ ...userDetails, username: username });
-        setUserDetails({ ...userDetails, password: password });
+        console.log(username);
+        setUserDetails({ ...userDetails, password: password ,userName: username});
         setState({
           ...state,
           serverResponse: "Registration Successful!",
@@ -209,7 +212,7 @@ const RegistrationForm = () => {
         </form>
       )}
 
-      {isSubmitted && <p>Registration Successful!</p>}
+      {isSubmitted && navigatRegister("/choice")}
     </div>
   );
 };

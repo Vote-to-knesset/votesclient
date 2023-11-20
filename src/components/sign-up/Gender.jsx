@@ -1,4 +1,6 @@
 import React from 'react';
+import useUserDetails from '../../../atoms/atomUser';
+
 
 class GenderChoice extends React.Component {
   constructor() {
@@ -7,6 +9,8 @@ class GenderChoice extends React.Component {
   }
 
   handleGenderChoice(gender) {
+    const [userDetails, setUserDetails] = useUserDetails();
+    setUserDetails({ ...userDetails, gender: gender });
     this.props.onViewChange('identity');
   }
 
