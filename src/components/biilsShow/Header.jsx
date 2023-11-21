@@ -2,19 +2,28 @@ import * as React from "react";
 import { useState } from "react";
 import Search from "./Search";
 import BillsFeed from "./BillsFeed";
+import UserDetails from "./UserDetails";
 
 
 
 function Header() {
 
-    const [userDetails,setUserDetails] = useState(false)
+    const [showUserDetails, setShowUserDetails] = useState(false);
+
+
+
+    const openUserDetails = () => {
+      setShowUserDetails(! showUserDetails);
+    };
+  
+
 
 
   return (
     <header className="bg-blue-800 p-4 text-white flex justify-between items-center">
       <div className="flex items-center">
         <button className="mr-4"
-        onClick={() => setUserDetails(!userDetails)}>
+        onClick={openUserDetails}>
           <svg
             viewBox="0 0 24 24"
             fill="currentColor"
@@ -43,6 +52,11 @@ function Header() {
 
 
         </button>
+
+
+        <UserDetails show={showUserDetails}  />
+
+     
     </header>
   );
 }

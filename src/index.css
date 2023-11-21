@@ -58,3 +58,18 @@
   visibility: visible;
   transform: translateX(10px);
 }
+
+.choices {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 3%;
+}
+
+.choice {
+  width: 20rem;
+  height: 10rem;
+  min-width: 15rem;
+  border-radius: 10%;
+}

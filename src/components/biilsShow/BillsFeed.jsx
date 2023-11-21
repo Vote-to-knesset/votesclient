@@ -42,8 +42,8 @@ function BillsFeed() {
     }));
   };
   const filteredBills = bills.filter((bill) =>
-  bill.Name.includes(searchTerm)
-);
+  (bill.name && bill.name.includes(searchTerm)) || (bill.Name && bill.Name.includes(searchTerm)))
+
 
   return (
     <div>
