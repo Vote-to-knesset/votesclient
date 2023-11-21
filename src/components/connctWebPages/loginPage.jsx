@@ -1,64 +1,121 @@
-import React, { Component } from "react";
-import LoginForm from "../login/LoginForm";
-import RegistrationForm from "../register/RegistrationForm";
+import * as React from "react";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Link from "@mui/material/Link";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-class LoginPage extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showRegistrationForm: false,
-      showLoginForm: true,
-      buttonsVisible: false,
-    };
-  }
-
-  handleShowRegistrationForm = () => {
-    this.setState({
-      showRegistrationForm: true,
-      showLoginForm: false,
-      buttonsVisible: false,
-    });
-  };
-
-  handleShowLoginForm = () => {
-    this.setState({
-      showLoginForm: false,
-      showRegistrationForm: true,
-      buttonsVisible: false,
-    });
-  };
-
-  render() {
-    return (
-      <div
-        className="flex justify-center items-center min-h-screen bg-cover bg-center bg-fixed bg-no-repeat "
-        style={{ backgroundImage: "url('./src/kn-image.png')" }}
-      >
-        <span className="text-5xl text-black absolute bottom-0 left-0 w-full animate-riseBottom">
-          ברוכים הבאים לאתר שלנו
-        </span>
-        <div
-          id="login-box"
-          className="w-96 h-96 border-2 border-black rounded-2xl bg-black bg-opacity-40 text-center flex ml-60 flex-col justify-between "
-        >
-          <div>רישום והתחברות</div>
-
-          {this.state.showRegistrationForm && <RegistrationForm />}
-          {this.state.showLoginForm && <LoginForm />}
-
-          {this.state.showLoginForm && (<>
-            <h2>או</h2>
-            <button
-              className="login-button rounded-full p-5 mr-20 ml-20 mb-20 py-2 bg-blue-500 text-white mb-4 "
-              onClick={this.handleShowLoginForm}
-            >
-              הירשם
-            </button>
-          </>)}
-        </div>
-      </div>
-    );
-  }
+function Copyright(props) {
+  return (
+    <Typography
+      variant="body2"
+      color="text.secondary"
+      align="center"
+      {...props}
+    >
+      {"Copyright © "}
+      <Link color="inherit" href="https://mui.com/">
+        Your Website
+      </Link>{" "}
+      {new Date().getFullYear()}
+      {"."}
+    </Typography>
+  );
 }
 
-export default LoginPage;
+// TODO remove, this demo shouldn't need to reset the theme.
+
+const defaultTheme = createTheme();
+
+export default function SignIn() {
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    console.log({
+      email: data.get("userName"),
+      password: data.get("password"),
+    });
+  };
+
+  return (
+    <ThemeProvider theme={defaultTheme}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            התחברות
+          </Typography>
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            noValidate
+            sx={{ mt: 1 }}
+          >
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="userName"
+              label="שם משתמש"
+              name="userName"
+              autoComplete="userName"
+              autoFocus
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="סיסמא"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+            />
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="זכור אותי"
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              התחברות
+            </Button>
+            <Grid container>
+              <Grid item xs>
+                <Link href="#" variant="body2">
+                  שכחתי סיסמא
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link href="#" variant="body2">
+                  {"אין לך חשבון? הרשם כאן"}
+                </Link>
+              </Grid>
+            </Grid>
+          </Box>
+        </Box>
+      </Container>
+    </ThemeProvider>
+  );
+}
