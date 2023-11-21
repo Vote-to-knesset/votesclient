@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import useUserDetails from "../../../atoms/atomUser";
 import axios from "axios";
-
+import { useNavigate } from "react-router-dom";
 const MainApp = () => {
   const [userDetails, setUserDetails] = useUserDetails();
   const [currentStep, setCurrentStep] = useState(1);
+
+  const navigatLogin = useNavigate()
+
 
   const parties = [
     "Likud",
@@ -98,6 +101,7 @@ const MainApp = () => {
         gender[steps[2].choices.indexOf(choice)],
         step
       );
+      navigatLogin("/login")
     }
   };
 
