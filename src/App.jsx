@@ -44,6 +44,7 @@ function App() {
     createRoutesFromElements(
       <Route path="/">
         <Route index element={<LoginPage />} />
+        <Route path="login" element={<LoginPage />} />
         <Route path="billsFeed" element={<BillsFeed />} />
         <Route path="choice" element={<MainApp />} />
 
