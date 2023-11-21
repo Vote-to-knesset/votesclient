@@ -18,6 +18,19 @@ const MainApp = () => {
     "HarshimaHameshutefet",
     "Havoda",
   ];
+
+  const identity = [
+    "Ultra-Orthodox",
+    "National Religious",
+    "Traditional",
+    "Secular",
+    "Arab",
+    "Druze",
+    "Other",
+  ];
+
+  const gender = ["Other", "Female", "Male"];
+
   const steps = [
     {
       component: "Party",
@@ -62,6 +75,7 @@ const MainApp = () => {
         { ...userDetails, gender: choice }
       );
     } catch (error) {
+      console.log({ ...userDetails, gender: choice });
       console.log(error);
     }
   };
@@ -74,10 +88,16 @@ const MainApp = () => {
       });
       setCurrentStep(2);
     } else if (step === "Identity") {
-      setUserDetails({ ...userDetails, [step.toLowerCase()]: choice });
+      setUserDetails({
+        ...userDetails,
+        [step.toLowerCase()]: identity[steps[1].choices.indexOf(choice)],
+      });
       setCurrentStep(3);
     } else if (step === "gender") {
-      await updateUserDetailsAndSubmit(choice, step);
+      await updateUserDetailsAndSubmit(
+        gender[steps[2].choices.indexOf(choice)],
+        step
+      );
     }
   };
 
@@ -89,14 +109,14 @@ const MainApp = () => {
       }}
     >
       <div className="text-center text-white">
-        <h1 className="text-3xl font-bold mb-8">
+        <h1 className="text-5xl font-bold mb-8 bg-blue-500">
           {steps[currentStep - 1].title}
         </h1>
-        <div className="flex justify-center gap-4">
+        <div className="grid grid-cols-3 gap-4">
           {steps[currentStep - 1].choices.map((choice, index) => (
             <button
               key={index}
-              className="px-20 py-10 bg-blue-500 text-white rounded cursor-pointer"
+              className="px-20 py-10 bg-blue-300 text-white rounded cursor-pointer"
               onClick={() =>
                 handleChoice(choice, steps[currentStep - 1].component)
               }
