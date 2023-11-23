@@ -10,7 +10,7 @@ import {
 } from "react-router-dom";
 import { useBills, useSelectedBills } from "../atoms/atomBills.js";
 import dbTest from "../db/dbTest.js";
-import LoginPage from "./components/connctWebPages/LoginPage.jsx";
+import LoginEntry from "./components/connctWebPages/LoginPage.jsx";
 import BillsFeed from "./components/biilsShow/BillsFeed.jsx";
 import MainApp from "./components/sign-up/MainApp.jsx";
 
@@ -105,7 +105,7 @@ function App() {
     createRoutesFromElements(
       <Route path="/">
         <Route index element={<LoginPage />} />
-        <Route path="login" element={<LoginPage />} />
+        <Route path="login" element={<LoginEntry />} />
         <Route path="billsFeed" element={<BillsFeed />} />
         <Route path="choice" element={<MainApp />} />
       </Route>

@@ -4,10 +4,7 @@ import RegistrationForm from "../register/RegistrationForm";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-
-
-
-const LoginPage = () => {
+const LoginEntry = () => {
   const [showRegistrationForm, setShowRegistrationForm] = useState(false);
   const [showLoginForm, setShowLoginForm] = useState(true);
   const navigateBills = useNavigate();
@@ -19,6 +16,7 @@ const LoginPage = () => {
         if (token) {
           const response = await axios.post(
             "http://localhost:5050/votes/userexist",
+            {},
             {
               headers: {
                 Authorization: `Bearer ${token}`,
@@ -66,13 +64,13 @@ const LoginPage = () => {
         {showLoginForm && (
           <>
             <h2>או</h2>
-            <button className="login-button rounded-full p-5 mr-20 ml-20 mb-20 py-2 bg-blue-500 text-white mb-4" onClick={handleShowRegistrationForm}>
+            <button className="login-button rounded-full p-5 mr-20 ml-20 mb-20 py-2 bg-blue-500 text-white" onClick={handleShowRegistrationForm}>
               הירשם
             </button>
           </>
         )}
         {!showLoginForm && (
-          <button className="login-button rounded-full p-5 mr-20 ml-20 mb-20 py-2 bg-blue-500 text-white mb-4" onClick={handleShowLoginForm}>
+          <button className="login-button rounded-full p-5 mr-20 ml-20 mb-20 py-2 bg-blue-500 text-white " onClick={handleShowLoginForm}>
             התחבר
           </button>
         )}
@@ -81,4 +79,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default LoginEntry;
