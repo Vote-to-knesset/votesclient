@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './Header';
 import GraphVotes from './GraphVotes';
 import BillComments from './BillComments';
-import useBills from '../../../atoms/atomBills'
+import {useBills, useSelectedBills} from '../../../atoms/atomBills'
 import { useSearchTerm } from '../../../atoms/atomBills';
-
+import axios from 'axios';
 
 
 function calculateVoteData(bill) {
@@ -14,24 +14,56 @@ function calculateVoteData(bill) {
 }
 
 function BillsFeed() {
-  const [selectedBills, setSelectedBills] = useState([]);
   const [comment1,setComment1] = useState('')
   const [openComments, setOpenComments] = useState({}); 
   const [bills] = useBills()
   const [searchTerm] = useSearchTerm()
-  
+  const [selecteBills,setSelectedBills] = useSelectedBills();
+  const [ Sbills, setSbills] = useState([]);
+  const submitVoteToServer = async (billId, vote, token) => {
+    try {
+      const response = await axios.post(
+        'http://localhost:5050/votes/submitVote',
+        { billId, vote },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      
 
+
+      if (response.status === 200) {
+        console.log('Vote submitted successfully');
+      } else {
+        console.error('Failed to submit vote');
+      }
+    } catch (error) {
+      console.error('Error submitting vote:', error);
+
+    }
+  };
 
 
 
   const handleVoteClickFor = (bill) => {
     bill.in_favor += 1;
-    setSelectedBills([...selectedBills, bill]);
+    setSbills([...Sbills, bill]);
+
+    const token = localStorage.getItem('tokenVote');
+    submitVoteToServer(bill.BillID, 'in_favor', token);
   };
 
   const handleVoteClickAga = (bill) => {
+
     bill.against += 1;
-    setSelectedBills([...selectedBills, bill]);
+    
+    setSbills([...Sbills, bill]);
+
+    const token = localStorage.getItem('tokenVote');
+    submitVoteToServer(bill.BillID, 'against', token);
   };
 
   const toggleComment = (bill) => {
@@ -62,7 +94,7 @@ function BillsFeed() {
                 קישור למסמך הסבר הצעת החוק
               </a>
             )}
-            {selectedBills.includes(bill) ? (
+            {selecteBills.includes(bill.BillID) || Sbills.includes(bill)? (
               <GraphVotes voteData={calculateVoteData(bill)} />
             ) : (
               <div>

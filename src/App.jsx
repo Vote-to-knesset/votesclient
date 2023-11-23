@@ -8,16 +8,17 @@ import {
   Route,
   createRoutesFromElements,
 } from "react-router-dom";
-import useBills from "../atoms/atomBills.js";
+import { useBills, useSelectedBills } from "../atoms/atomBills.js";
 import dbTest from "../db/dbTest.js";
 import LoginPage from "./components/connctWebPages/loginPage.jsx";
 import BillsFeed from "./components/biilsShow/BillsFeed.jsx";
 import MainApp from "./components/sign-up/MainApp.jsx";
 
-
 async function getBills() {
   try {
-    const response = await axios.get("https://kns-data-votes.onrender.com/api/data_bills");
+    const response = await axios.get(
+      "https://kns-data-votes.onrender.com/api/data_bills"
+    );
     return response.data;
   } catch (error) {
     console.error(error);
@@ -25,20 +26,80 @@ async function getBills() {
   }
 }
 
+async function getSelectedBills() {
+  try {
+    const token = localStorage.getItem("tokenVote");
+    if (token) {
+      const response = await axios.get(
+        "http://localhost:5050/votes/selectedBills",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        return response.data.data || [];
+      } else {
+        console.error("Failed to fetch selected bills");
+      }
+    } else {
+      console.error("Token not found");
+    }
+  } catch (error) {
+    console.error("Error fetching selected bills:", error);
+  }
+}
+
 function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [bills, setBills] = useBills();
-  // setBills(dbTest);
+  const [selecteBills, setSelecteBills] = useSelectedBills();
+
+  useEffect(() => {
+    const fetchSelectedBills = async () => {
+      const data = await getSelectedBills();
+
+      setSelecteBills(data);
+    };
+
+    fetchSelectedBills();
+  }, []);
 
   useEffect(() => {
     const fetchBills = async () => {
       const data = await getBills();
-      
-      setBills(data);
+      let sortedBills = [];
+      let selectedBills = []
+      let unselectedBills = []
+
+      if (selecteBills.length > 0) {
+        const selectedSet = new Set(selecteBills);
+        data.map((bill)=>{
+          if (selectedSet.has(bill.BillID)){
+            
+            selectedBills.push(bill)
+          }
+          else{
+            
+            unselectedBills.push(bill)
+          }
+          
+
+        })
+        sortedBills = [...unselectedBills, ...selectedBills];
+
+
+      } else {
+        sortedBills = [];
+      }
+      setBills(sortedBills)
+
     };
 
     fetchBills();
-  }, []);
+  }, [selecteBills]);
 
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -47,7 +108,6 @@ function App() {
         <Route path="login" element={<LoginPage />} />
         <Route path="billsFeed" element={<BillsFeed />} />
         <Route path="choice" element={<MainApp />} />
-
       </Route>
     )
   );

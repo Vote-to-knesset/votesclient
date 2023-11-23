@@ -11,15 +11,15 @@ const MainApp = () => {
 
   const parties = [
     "Likud",
-    "YeshAtid",
-    "HatsionutHadatit",
-    "HamachaneHamamlachti",
+    "YeshAtidNationalUnity",
+    "OtzmaYehudit",
+    "Mafdal_ReligiousZionism",
     "Shas",
-    "YhadutHatora",
-    "IsraelBeitenu",
-    "Raam",
-    "HarshimaHameshutefet",
-    "Havoda",
+    "UnitedTorahJudaism",
+    "YisraelBeiteinu",
+    "UnitedArabList",
+    "Hadash_Taal",
+    "LaborParty",
   ];
   const steps = [
     {
@@ -31,10 +31,10 @@ const MainApp = () => {
         "הציונות הדתית",
         "המחנה הממלכתי",
         "שס",
-        "יהדות התורה",
-        "ישראל ביתנו",
-        "רעמ",
-        "הרשימה המשותפת",
+       "יהדות התורה",
+       "ישראל ביתנו",
+       "רעמ",
+       ' חדש תעל',
         "העבודה",
       ],
     },
