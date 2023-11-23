@@ -10,7 +10,7 @@ import {
 } from "react-router-dom";
 import { useBills, useSelectedBills } from "../atoms/atomBills.js";
 import dbTest from "../db/dbTest.js";
-import LoginPage from "./components/connctWebPages/loginPage.jsx";
+import LoginPage from "./components/connctWebPages/LoginPage.jsx";
 import BillsFeed from "./components/biilsShow/BillsFeed.jsx";
 import MainApp from "./components/sign-up/MainApp.jsx";
 
@@ -82,7 +82,7 @@ function App() {
             selectedBills.push(bill)
           }
           else{
-            
+
             unselectedBills.push(bill)
           }
           
