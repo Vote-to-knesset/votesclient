@@ -1,19 +1,18 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 
 function GraphVotes({ voteData }) {
   const totalVotes = voteData.in_favor + voteData.against;
   const percentInFavor = (voteData.in_favor / totalVotes) * 100;
   const percentAgainst = (voteData.against / totalVotes) * 100;
 
-
   const greenBarStyle = {
     width: `${percentInFavor}%`,
-    animation: 'fillGreen 2s ease-in-out', 
+    animation: percentInFavor > 0 ? `fillGreen 1s ease-in-out` : '',
   };
 
   const redBarStyle = {
     width: `${percentAgainst}%`,
-    animation: 'fillRed 2s ease-in-out', 
+    animation: percentAgainst > 0 ? `fillRed 1s ease-in-out` : '',
   };
 
   return (

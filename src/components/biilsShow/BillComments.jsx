@@ -1,110 +1,115 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+// Fake Database to simulate discussions and comments
+const fakeDB = {
+  discussions: [
+    {
+      id: 1,
+      title: 'Discussion 1',
+      comments: [
+        { id: 1, text: 'Comment 1 for Discussion 1', author: 'UserA', timestamp: '2023-11-25T10:30:00Z' },
+        { id: 2, text: 'Comment 2 for Discussion 1', author: 'UserB', timestamp: '2023-11-25T11:00:00Z' },
+      ],
+    },
+    {
+      id: 2,
+      title: 'Discussion 2',
+      comments: [
+        { id: 1, text: 'Comment 1 for Discussion 2', author: 'UserC', timestamp: '2023-11-25T12:00:00Z' },
+      ],
+    },
+  ],
+};
+
 function BillComment({ billId }) {
   const [comment, setComment] = useState('');
-  const [comments, setComments] = useState([]);
-
+  const [discussions, setDiscussions] = useState([]);
+  const [selectedDiscussion, setSelectedDiscussion] = useState(null);
 
   useEffect(() => {
-    async function fetchComments() {
-      try {
-        const response = await axios.get("https://kns-data-votes..onrender.com/api/get_comments", {
-          params: {
-            billId: billId
-          }
-        });
-        console.log(response.data);
-        setComments(response.data || []);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  
-    fetchComments();
-  }, [billId]);
+    // Simulating fetching discussions from a fake database
+    setDiscussions(fakeDB.discussions);
+  }, []);
 
-  const handleAddComment = async (e) => {
-    if (e.key === 'Enter' && comment) {
+  const handleDiscussionClick = (discussion) => {
+    setSelectedDiscussion(discussion);
+  };
+
+  const handleAddComment = async () => {
+    if (comment && selectedDiscussion) {
       const newComment = {
+        id: selectedDiscussion.comments.length + 1,
         text: comment,
         author: "UserX",
         timestamp: new Date().toISOString(),
       };
 
-      // try {
-      //   await axios.post("https://kns-data-votes.onrender.com/api/add_comment", {
-      //     billId,
-      //     comment: newComment,
-      //   });
+      const updatedComments = [...selectedDiscussion.comments, newComment];
+      const updatedDiscussions = discussions.map((discussion) =>
+        discussion.id === selectedDiscussion.id ? { ...discussion, comments: updatedComments } : discussion
+      );
 
-
-        setComments([newComment, ...comments]);
-        setComment('');
-      // } catch (error) {
-      //   console.error(error);
-      // }
+      setDiscussions(updatedDiscussions);
+      setComment('');
     }
   };
-  
-    return (
-      <div>
-        <div className="comments overflow-y-auto p-4 h-[200px]">
-          {comments.map((comment) => (
-            <div className="bg-gray-100 p-2" >
-              <div className="flex flex-col space-y-6">
-                <div className="bg-white p-1 rounded-lg shadow-md">
-                  <h3 className="text-lg font-bold">{comment.author}</h3>
+
+  return (
+    <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50">
+      <div className="w-3/4 h-3/4 bg-white rounded-lg shadow-lg overflow-hidden relative">
+        {selectedDiscussion ? (
+          <div>
+            <h2 className="text-gray-700 text-lg mb-2">{selectedDiscussion.title}</h2>
+            <div className="h-4/5 overflow-y-auto p-4">
+              {selectedDiscussion.comments.map((comment) => (
+                <div key={comment.id} className="bg-gray-100 p-2 rounded-lg shadow-md mb-4">
                   <p className="text-gray-700 text-sm mb-2">
                     {new Date(comment.timestamp).toLocaleString()}
                   </p>
-                  <p className="text-gray-700">{comment.text}</p>
+                  <h1 className="text-gray-700">{comment.text}</h1>
                 </div>
-              </div>
+              ))}
             </div>
-          ))}
-        </div>
-  
-        <div className="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-300 dark:border-gray-200 ">
-          <label htmlFor="comment" className="sr-only">
-            Your comment
-          </label>
-          <textarea
-            id="comment"
-            rows="2"
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            onKeyPress={handleAddComment}
-            className="w-full text-sm textarea-bordered textarea-xs text-gray-900 bg-white border-0 dark:bg-gray-100 focus:ring-0 dark:text-black dark:placeholder-gray-900"
-            placeholder="כתוב תגובה ..."
-            required
-          ></textarea>
-  
-          <div className="flex items-center justify-between py-2 border-t dark:border-gray-600 ">
-            <button
-              
-              onClick={handleAddComment}
-              type="submit"
-              className="inline-flex  py-2 px-8 text-xs font-medium text-center text-white bg-blue-500 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800"
-            >
-              פרסם תגובה
-            </button>
+         
           </div>
-  
-          <div className="flex items-baseline justify-between">
-            <p className="ml-auto text-xs text-gray-500 dark:text-gray-400">
-              זכור, שמור על שפה נקיה ומכבדת{' '}
-              <a href="#" className="text-blue-600 dark:text-blue-500 hover:underline">
-                כללי הקהילה
-              </a>
-              .
-            </p>
+        ) : (
+          <div className="h-4/5 overflow-y-auto p-4">
+            {discussions.map((discussion) => (
+              <div key={discussion.id} className="p-4 cursor-pointer" onClick={() => handleDiscussionClick(discussion)}>
+                <h2 className="text-gray-700 text-lg mb-2">{discussion.title}</h2>
+                <p className="text-gray-500">{discussion.comments.length} תגובות</p>
+              </div>
+            ))}
+               <div className="absolute bottom-0 left-0 w-full p-4 bg-gray-100 border-t border-gray-300">
+              <textarea
+                rows="2"
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                className="w-full p-2 mb-2 border border-gray-300 rounded text-black focus:outline-none"
+                placeholder="כתוב תגובה ..."
+                required
+              ></textarea>
+              <button
+                onClick={handleAddComment}
+                type="submit"
+                className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600 focus:outline-none"
+              >
+                פתח דיון
+              </button>
+              <p className="text-xs text-gray-500">
+                זכור, שמור על שפה נקיה ומכבדת{' '}
+                <a href="#" className="text-blue-500 hover:underline">
+                  כללי הקהילה
+                </a>
+                .
+              </p>
+            </div>
           </div>
-        </div>
+        )}
       </div>
-    );
-  }
-  
-  export default BillComment;
+    </div>
+  );
+}
 
-
+export default BillComment;

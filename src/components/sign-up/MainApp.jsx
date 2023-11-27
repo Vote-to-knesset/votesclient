@@ -21,6 +21,18 @@ const MainApp = () => {
     "Hadash_Taal",
     "LaborParty",
   ];
+  const identity = [
+    "Ultra-Orthodox",
+    "National Religious",
+    "Traditional",
+    "Secular",
+    "Arab",
+    "Druze",
+    "Other",
+  ];
+
+  const gender = ["Other", "Female", "Male"];
+
   const steps = [
     {
       component: "Party",
@@ -31,10 +43,10 @@ const MainApp = () => {
         "הציונות הדתית",
         "המחנה הממלכתי",
         "שס",
-       "יהדות התורה",
-       "ישראל ביתנו",
-       "רעמ",
-       ' חדש תעל',
+        "יהדות התורה",
+        "ישראל ביתנו",
+        "רעמ",
+        "הרשימה המשותפת",
         "העבודה",
       ],
     },
@@ -65,6 +77,7 @@ const MainApp = () => {
         { ...userDetails, gender: choice }
       );
     } catch (error) {
+      console.log({ ...userDetails, gender: choice });
       console.log(error);
     }
   };
@@ -77,30 +90,36 @@ const MainApp = () => {
       });
       setCurrentStep(2);
     } else if (step === "Identity") {
-      setUserDetails({ ...userDetails, [step.toLowerCase()]: choice });
+      setUserDetails({
+        ...userDetails,
+        [step.toLowerCase()]: identity[steps[1].choices.indexOf(choice)],
+      });
       setCurrentStep(3);
     } else if (step === "gender") {
-      await updateUserDetailsAndSubmit(choice, step);
+      await updateUserDetailsAndSubmit(
+        gender[steps[2].choices.indexOf(choice)],
+        step
+      );
       navigatLogin("/login")
     }
   };
 
   return (
-    <div
+    <div dir="rtl"
       className="h-screen bg-cover bg-no-repeat bg-fixed flex items-center justify-center"
       style={{
-        backgroundImage: 'url("https://www.idi.org.il/media/9162/knesset.jpg")',
+        backgroundImage: "url('./src/kn-image.png')",
       }}
     >
       <div className="text-center text-white">
-        <h1 className="text-3xl font-bold mb-8">
+        <h1 className="text-5xl font-bold mb-8 ">
           {steps[currentStep - 1].title}
         </h1>
-        <div className="flex justify-center gap-4">
+        <div className="grid grid-cols-3 gap-4">
           {steps[currentStep - 1].choices.map((choice, index) => (
             <button
               key={index}
-              className="px-20 py-10 bg-blue-500 text-white rounded cursor-pointer"
+              className="px-20 py-10 bg-blue-300 text-white rounded cursor-pointer"
               onClick={() =>
                 handleChoice(choice, steps[currentStep - 1].component)
               }
@@ -114,4 +133,9 @@ const MainApp = () => {
   );
 };
 
-export default MainApp;
+export default MainApp;
+
+
+
+
+ 

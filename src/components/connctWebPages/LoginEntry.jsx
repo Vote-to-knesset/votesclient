@@ -23,8 +23,9 @@ const LoginEntry = () => {
               },
             }
           );
-
+          
           if (response.status === 200) {
+            
             navigateBills("/billsFeed"); 
           } else {
             console.error("Failed to fetch selected bills");
