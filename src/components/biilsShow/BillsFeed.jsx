@@ -58,10 +58,11 @@ function BillsFeed() {
   const [bills, setBills] = useState([]);
   const [selecteBills, setSelecteBills] = useState([]);
   const [skip, setSkip] = useState(0);
-  const commentsRef = useRef(null);
-  console.log(comment1,commentsRef,openComments);
+
+
 
   const [isMounted, setIsMounted] = useState(false);
+
 
   useLayoutEffect(() => {
     if (!isMounted) {
@@ -135,25 +136,20 @@ function BillsFeed() {
     const token = localStorage.getItem("tokenVote");
     submitVoteToServer(bill.BillID, "against", token);
   };
-  const handleClickOutside = (event) => {
-    if (commentsRef.current && !commentsRef.current.contains(event.target)) {
-      if(openComments){
-      setOpenComments({});
-    }}
-  };
-  useEffect(() => {
-    document.addEventListener("click", handleClickOutside);
+  const handleClickOutside = () => {
+    setOpenComments({});
 
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, []);
+      
+  };
 
   const toggleComment = (bill) => {
-    setComment1(bill.BillID);
+    const billID = bill.BillID;
+    setComment1(billID);
+    
     setOpenComments((prevComments) => ({
       ...prevComments,
-      [bill.BillID]: !prevComments[bill.BillID],
+      [billID]: !prevComments[billID],
+
     }));
   };
   const filteredBills = bills.filter(
@@ -167,8 +163,6 @@ function BillsFeed() {
     setSkip(newSkip);
     try {
       const moreBillsData = await getBills(newSkip);
-      console.log(moreBillsData);
-
       let sortedBills = [];
       let selectedBills = [];
       let unselectedBills = [];
@@ -256,12 +250,12 @@ function BillsFeed() {
                     </svg>
                   </button>
                 </div>
-                <div ref={commentsRef}>
-                  {openComments[bill.BillID] && (
-                    <BillComments billId={comment1} />
-                  )}
-                </div>
-              </div>
+                
+              {openComments[bill.BillID] && (
+                <BillComments billId={bill.BillID} onClose={handleClickOutside} />
+              )}
+            </div>
+           
             ))}
           </div>
         </div>
