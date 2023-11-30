@@ -11,17 +11,16 @@ const MainApp = () => {
 
   const parties = [
     "Likud",
-    "YeshAtid",
-    "HatsionutHadatit",
-    "HamachaneHamamlachti",
+    "YeshAtidNationalUnity",
+    "OtzmaYehudit",
+    "Mafdal_ReligiousZionism",
     "Shas",
-    "YhadutHatora",
-    "IsraelBeitenu",
-    "Raam",
-    "HarshimaHameshutefet",
-    "Havoda",
+    "UnitedTorahJudaism",
+    "YisraelBeiteinu",
+    "UnitedArabList",
+    "Hadash_Taal",
+    "LaborParty",
   ];
-
   const identity = [
     "Ultra-Orthodox",
     "National Religious",
@@ -31,9 +30,6 @@ const MainApp = () => {
     "Druze",
     "Other",
   ];
-
-  const gender = ["Other", "Female", "Male"];
-
   const steps = [
     {
       component: "Party",
@@ -78,7 +74,6 @@ const MainApp = () => {
         { ...userDetails, gender: choice }
       );
     } catch (error) {
-      console.log({ ...userDetails, gender: choice });
       console.log(error);
     }
   };
@@ -106,14 +101,12 @@ const MainApp = () => {
   };
 
   return (
-    <div
-      className="h-screen bg-cover bg-no-repeat bg-fixed flex items-center justify-center"
-      style={{
-        backgroundImage: 'url("https://www.idi.org.il/media/9162/knesset.jpg")',
-      }}
+    <div dir="rtl"
+      className="h-screen bg-cover bg-no-repeat bg-fixed flex items-center justify-center bg-gray-100"
+     
     >
       <div className="text-center text-white">
-        <h1 className="text-5xl font-bold mb-8 bg-blue-500">
+        <h1 className="text-5xl font-bold mb-8 ">
           {steps[currentStep - 1].title}
         </h1>
         <div className="grid grid-cols-3 gap-4">
@@ -135,3 +128,8 @@ const MainApp = () => {
 };
 
 export default MainApp;
+
+
+
+
+ 

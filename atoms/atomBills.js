@@ -7,4 +7,7 @@ const useBills = () => useAtom(bills)
 const searchTerm = atom("")
 export const useSearchTerm = () => useAtom(searchTerm)
 
-export default useBills
+const selecteBills = atom([])
+const useSelectedBills = () => useAtom(selecteBills)
+
+export { useBills, useSelectedBills};
