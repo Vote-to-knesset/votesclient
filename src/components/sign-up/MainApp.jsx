@@ -30,9 +30,6 @@ const MainApp = () => {
     "Druze",
     "Other",
   ];
-
-  const gender = ["Other", "Female", "Male"];
-
   const steps = [
     {
       component: "Party",
@@ -77,7 +74,6 @@ const MainApp = () => {
         { ...userDetails, gender: choice }
       );
     } catch (error) {
-      console.log({ ...userDetails, gender: choice });
       console.log(error);
     }
   };
@@ -131,7 +127,7 @@ const MainApp = () => {
   );
 };
 
-export default MainApp;
+export default MainApp;
 
 
 
