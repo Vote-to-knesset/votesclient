@@ -23,6 +23,7 @@ const calculateTimeElapsed = (timestamp) => {
 
 async function getBillsComments(billId) {
   try {
+    console.log(billId);
     const token = localStorage.getItem("tokenVote");
     if (token) {
       const response = await axios.get(
@@ -63,6 +64,7 @@ function BillComment({ billId, onClose }) {
     const fetchDiscussions = async () => {
       try {
         const response = await getBillsComments(billId)
+        console.log(response);
         setDiscussions(response.comments);
       } catch (error) {
         console.error('Error fetching discussions:', error);
@@ -72,6 +74,32 @@ function BillComment({ billId, onClose }) {
     fetchDiscussions();
   }, []);
 
+
+  const addLike = async(billId, discussionTitle,comment)=>{
+    try {
+      const token = localStorage.getItem("tokenVote");
+      const response = await axios.post(
+        "http://localhost:5050/votes/adddiscussion",
+        { billId, discussionTitle ,comment},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        console.log(" successfully");
+      } else {
+        console.error("Failed to update like");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    
+
+  }
 
   const addDiscussion = async (billId, discussionTitle) => {
     try {
@@ -171,7 +199,7 @@ function BillComment({ billId, onClose }) {
 
   return (
     <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="w-3/4 h-3/4 bg-white rounded-lg shadow-lg overflow-hidden relative">
+      <div className="w-3/4 h-3/4 bg-white rounded-lg shadow-lg  relative">
         <div className="flex justify-end">
           <div
             className="bg-gray-200 rounded-full p-2 m-4 cursor-pointer"
@@ -182,23 +210,24 @@ function BillComment({ billId, onClose }) {
         </div>
         {selectedDiscussion && comments ? (
           <div>
-            <h2 className="text-gray-700 text-lg mb-2">
+            <h2 className="text-gray-700 text-lg mb-2 mr-4">
               {selectedDiscussion.title}
             </h2>
-            <div className="h-4/5 overflow-y-auto p-4">
+            <div className=" h-48 max-h-** overflow-y-scroll p-4">
               {comments.map((comment) => (
                 <div
-                  key={comment.id}
-                  className="bg-white  text-black p-4 antialiased  "
+                  key={comment.text}
+                  className="bg-white text-black p-4 antialiased"
+                  style={{ borderBottom: '1px solid #ccc' }}
                 >
-                  <div className="bg-gray-300  rounded-full px-2 pt-2 pb-2.5">
+                  <div className="bg-gray-300 rounded-full px-2 pt-2 pb-2.5">
                     <div className="text-normal leading-snug md:leading-normal">
                       {comment.text}
                     </div>
                   </div>
                   <div className="text-sm ml-4 mr-60 mt-0.5 text-black ">
                   {calculateTimeElapsed(comment.timestamp)}                  </div>
-                  <div className="bg-white  border border-white dark:border-gray-200 rounded-full float-right -mt-8 mr-0.5 flex shadow items-center">
+                  <div onClick={()=>addLike(billId,discussionTitle,comment.text)} className="bg-white  border border-white dark:border-gray-200 rounded-full float-right -mt-8 mr-0.5 flex shadow items-center">
                     <svg
                       class="p-0.5 h-5 w-5 rounded-full z-20 bg-white dark:bg-blue-700"
                       xmlns="http://www.w3.org/2000/svg"

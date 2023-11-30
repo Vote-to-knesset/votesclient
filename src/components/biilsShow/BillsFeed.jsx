@@ -58,7 +58,7 @@ function BillsFeed() {
   const [bills, setBills] = useState([]);
   const [selecteBills, setSelecteBills] = useState([]);
   const [skip, setSkip] = useState(0);
-
+console.log(comment1);
 
 
   const [isMounted, setIsMounted] = useState(false);
@@ -188,8 +188,8 @@ function BillsFeed() {
   return (
     <div>
       <Header skip={handleLoadMore} />
-      <div className="flex justify-center items-center h-screen bg-blue-300">
-        <div class="flex-none w-full md:w-3/4 flex flex-col justify-end items-end">
+      <div className="flex justify-center items-center h-screen bg-gray-200">
+        <div className="flex-none w-full md:w-full flex flex-col justify-end items-end">
           <div
             dir="rtl"
             className="bill-feed overflow-y-auto p-4 h-[600px]  text-white"
@@ -252,7 +252,7 @@ function BillsFeed() {
                 </div>
                 
               {openComments[bill.BillID] && (
-                <BillComments billId={bill.BillID} onClose={handleClickOutside} />
+                <BillComments billId={comment1} onClose={handleClickOutside} />
               )}
             </div>
            

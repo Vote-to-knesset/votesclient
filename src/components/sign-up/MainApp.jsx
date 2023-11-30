@@ -106,10 +106,8 @@ const MainApp = () => {
 
   return (
     <div dir="rtl"
-      className="h-screen bg-cover bg-no-repeat bg-fixed flex items-center justify-center"
-      style={{
-        backgroundImage: "url('./src/kn-image.png')",
-      }}
+      className="h-screen bg-cover bg-no-repeat bg-fixed flex items-center justify-center bg-gray-100"
+     
     >
       <div className="text-center text-white">
         <h1 className="text-5xl font-bold mb-8 ">

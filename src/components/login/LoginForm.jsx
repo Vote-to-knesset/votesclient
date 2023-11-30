@@ -75,7 +75,7 @@ const LoginForm = () => {
       <button
         id="log-in"
         type="submit"
-        className="rounded-full px-5 py-2 bg-blue-500 text-white"
+        className="  rounded-2xl px-5 py-2 bg-blue-500 text-white hover:bg-blue-700"
       >
         התחבר
       </button>
