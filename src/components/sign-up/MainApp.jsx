@@ -70,7 +70,7 @@ const MainApp = () => {
   const updateUserDetailsAndSubmit = async (choice, step) => {
     try {
       const response = await axios.post(
-        "http://localhost:5050/users/signupUser",
+        "https://sever-users-node-js.vercel.app/users/signupUser",
         { ...userDetails, gender: choice }
       );
     } catch (error) {

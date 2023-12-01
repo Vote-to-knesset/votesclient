@@ -33,7 +33,7 @@ const RegistrationForm = () => {
       try {
         setIsLoading(true);
         const response = await axios.post(
-          "http://localhost:5050/users/signup",
+          "https://sever-users-node-js.vercel.app/users/signup",
           { email }
         );
 
@@ -74,7 +74,7 @@ const RegistrationForm = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5050/users/verifyEmail",
+        "https://sever-users-node-js.vercel.app/users/verifyEmail",
         { email, code }
       );
 
@@ -105,7 +105,7 @@ const RegistrationForm = () => {
     const { username, password } = state;
 
     try {
-      const response = await axios.post("http://localhost:5050/users/user", {
+      const response = await axios.post("https://sever-users-node-js.vercel.app/users/user", {
         username,
       });
 

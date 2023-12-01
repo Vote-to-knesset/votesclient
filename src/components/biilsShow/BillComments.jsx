@@ -1,8 +1,6 @@
-import React, { useState, useEffect,useLayoutEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { AiTwotoneCloseCircle } from "react-icons/ai";
 import axios from "axios";
-
-
 
 const calculateTimeElapsed = (timestamp) => {
   const now = new Date();
@@ -10,16 +8,15 @@ const calculateTimeElapsed = (timestamp) => {
   const diffTime = Math.abs(now - commentTime);
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
   const diffWeeks = Math.floor(diffDays / 7);
-  
+
   if (diffWeeks > 0) {
     return `${diffWeeks}ש`;
   } else if (diffDays > 0) {
     return `${diffDays}י`;
   } else {
-    return 'היום';
+    return "היום";
   }
 };
-
 
 async function getBillsComments(billId) {
   try {
@@ -27,10 +24,10 @@ async function getBillsComments(billId) {
     const token = localStorage.getItem("tokenVote");
     if (token) {
       const response = await axios.get(
-        "http://localhost:5050/votes/getcomments",
+        "https://sever-users-node-js.vercel.app/votes/getcomments",
         {
           params: {
-            billId: billId 
+            billId: billId,
           },
           headers: {
             "Content-Type": "application/json",
@@ -39,7 +36,6 @@ async function getBillsComments(billId) {
         }
       );
       if (response.status === 200) {
-
         return response.data || [];
       } else {
         console.error("Failed to fetch selected bills");
@@ -59,28 +55,26 @@ function BillComment({ billId, onClose }) {
   const [selectedDiscussion, setSelectedDiscussion] = useState(null);
   const [comments, setComments] = useState([]);
 
-
   useLayoutEffect(() => {
     const fetchDiscussions = async () => {
       try {
-        const response = await getBillsComments(billId)
+        const response = await getBillsComments(billId);
         console.log(response);
         setDiscussions(response.comments);
       } catch (error) {
-        console.error('Error fetching discussions:', error);
+        console.error("Error fetching discussions:", error);
       }
     };
 
     fetchDiscussions();
   }, []);
 
-
-  const addLike = async(billId, discussionTitle,comment)=>{
+  const addLike = async (billId, discussionTitle, comment) => {
     try {
       const token = localStorage.getItem("tokenVote");
       const response = await axios.post(
-        "http://localhost:5050/votes/adddiscussion",
-        { billId, discussionTitle ,comment},
+        "https://sever-users-node-js.vercel.app/votes/adddiscussion",
+        { billId, discussionTitle, comment },
         {
           headers: {
             "Content-Type": "application/json",
@@ -97,15 +91,13 @@ function BillComment({ billId, onClose }) {
     } catch (error) {
       console.error(error);
     }
-    
-
-  }
+  };
 
   const addDiscussion = async (billId, discussionTitle) => {
     try {
       const token = localStorage.getItem("tokenVote");
       const response = await axios.post(
-        "http://localhost:5050/votes/adddiscussion",
+        "https://sever-users-node-js.vercel.app/votes/adddiscussion",
         { billId, discussionTitle },
         {
           headers: {
@@ -125,13 +117,13 @@ function BillComment({ billId, onClose }) {
     }
   };
 
-  const addComment = async (billId, discussion,comment) => {
+  const addComment = async (billId, discussion, comment) => {
     try {
       const token = localStorage.getItem("tokenVote");
 
       const response = await axios.post(
-        "http://localhost:5050/votes/addcomment",
-        { billId, discussionTitle:discussion ,commentText:comment},
+        "https://sever-users-node-js.vercel.app/votes/addcomment",
+        { billId, discussionTitle: discussion, commentText: comment },
         {
           headers: {
             "Content-Type": "application/json",
@@ -149,8 +141,6 @@ function BillComment({ billId, onClose }) {
       console.error(error);
     }
   };
-
-
 
   const handleDiscussionClick = (discussion) => {
     setSelectedDiscussion(discussion);
@@ -171,7 +161,7 @@ function BillComment({ billId, onClose }) {
           ? { ...discussion, comments: updatedComments }
           : discussion
       );
-      addComment(billId,selectedDiscussion.title,comment)
+      addComment(billId, selectedDiscussion.title, comment);
       setDiscussions(updatedDiscussions);
       setComments(updatedComments);
       setComment("");
@@ -185,7 +175,7 @@ function BillComment({ billId, onClose }) {
         title: discussionTitle,
         comments: [],
       };
-      addDiscussion(billId,discussionTitle)
+      addDiscussion(billId, discussionTitle);
 
       const updatedDiscussions = [...discussions, newDiscussion];
       setDiscussions(updatedDiscussions);
@@ -218,7 +208,7 @@ function BillComment({ billId, onClose }) {
                 <div
                   key={comment.text}
                   className="bg-white text-black p-4 antialiased"
-                  style={{ borderBottom: '1px solid #ccc' }}
+                  style={{ borderBottom: "1px solid #ccc" }}
                 >
                   <div className="bg-gray-300 rounded-full px-2 pt-2 pb-2.5">
                     <div className="text-normal leading-snug md:leading-normal">
@@ -226,8 +216,14 @@ function BillComment({ billId, onClose }) {
                     </div>
                   </div>
                   <div className="text-sm ml-4 mr-60 mt-0.5 text-black ">
-                  {calculateTimeElapsed(comment.timestamp)}                  </div>
-                  <div onClick={()=>addLike(billId,discussionTitle,comment.text)} className="bg-white  border border-white dark:border-gray-200 rounded-full float-right -mt-8 mr-0.5 flex shadow items-center">
+                    {calculateTimeElapsed(comment.timestamp)}{" "}
+                  </div>
+                  <div
+                    onClick={() =>
+                      addLike(billId, discussionTitle, comment.text)
+                    }
+                    className="bg-white  border border-white dark:border-gray-200 rounded-full float-right -mt-8 mr-0.5 flex shadow items-center"
+                  >
                     <svg
                       class="p-0.5 h-5 w-5 rounded-full z-20 bg-white dark:bg-blue-700"
                       xmlns="http://www.w3.org/2000/svg"
