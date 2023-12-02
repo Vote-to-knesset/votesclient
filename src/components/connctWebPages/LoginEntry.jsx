@@ -15,7 +15,7 @@ const LoginEntry = () => {
         const token = localStorage.getItem("tokenVote");
         if (token) {
           const response = await axios.post(
-            "http://localhost:5050/votes/userexist",
+            "https://sever-users-node-js.vercel.app/votes/userexist",
             {},
             {
               headers: {

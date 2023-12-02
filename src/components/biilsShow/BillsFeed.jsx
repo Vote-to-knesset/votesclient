@@ -30,7 +30,7 @@ async function getSelectedBills() {
 
     if (token) {
       const response = await axios.get(
-        "http://localhost:5050/votes/selectedBills",
+        "https://sever-users-node-js.vercel.app/votes/selectedBills",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -38,6 +38,7 @@ async function getSelectedBills() {
         }
       );
       if (response.status === 200) {
+        console.log(response);
         return response.data.data || [];
       } else {
         console.error("Failed to fetch selected bills");
@@ -100,7 +101,8 @@ console.log(comment1);
   const submitVoteToServer = async (billId, vote, token) => {
     try {
       const response = await axios.post(
-        "http://localhost:5050/votes/submitVote",
+       
+        "https://sever-users-node-js.vercel.app/votes/submitVote",
         { billId, vote },
         {
           headers: {

@@ -23,7 +23,7 @@ const LoginForm = () => {
 
     if (username.trim() !== '' && password.trim() !== '') {
       try {
-        const response = await axios.post('http://localhost:5050/users/login', {
+        const response = await axios.post('https://sever-users-node-js.vercel.app/users/login', {
           userName: username,
           password: password,
         });

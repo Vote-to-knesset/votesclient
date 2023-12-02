@@ -30,6 +30,12 @@ const MainApp = () => {
     "Druze",
     "Other",
   ];
+
+  const gender = [
+    "else",
+    "woman",
+    "man"
+  ]
   const steps = [
     {
       component: "Party",
@@ -70,7 +76,7 @@ const MainApp = () => {
   const updateUserDetailsAndSubmit = async (choice, step) => {
     try {
       const response = await axios.post(
-        "http://localhost:5050/users/signupUser",
+        "https://sever-users-node-js.vercel.app/users/signupUser",
         { ...userDetails, gender: choice }
       );
     } catch (error) {
@@ -101,29 +107,26 @@ const MainApp = () => {
   };
 
   return (
-    <div dir="rtl"
-      className="h-screen bg-cover bg-no-repeat bg-fixed flex items-center justify-center bg-gray-100"
-     
-    >
-      <div className="text-center text-white">
-        <h1 className="text-5xl font-bold mb-8 ">
-          {steps[currentStep - 1].title}
-        </h1>
-        <div className="grid grid-cols-3 gap-4">
-          {steps[currentStep - 1].choices.map((choice, index) => (
-            <button
-              key={index}
-              className="px-20 py-10 bg-blue-300 text-white rounded cursor-pointer"
-              onClick={() =>
-                handleChoice(choice, steps[currentStep - 1].component)
-              }
-            >
-              {choice}
-            </button>
-          ))}
-        </div>
+    <div dir="rtl" className="min-h-screen bg-cover bg-no-repeat bg-fixed flex items-center justify-center bg-gray-100">
+    <div className="text-center text-black">
+      <h1 className="text-3xl sm:text-5xl font-bold mb-4 sm:mb-8">
+        {steps[currentStep - 1].title}
+      </h1>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {steps[currentStep - 1].choices.map((choice, index) => (
+          <button
+            key={index}
+            className="w-full sm:px-20 py-4 sm:py-10 bg-blue-500 text-white rounded cursor-pointer"
+            onClick={() =>
+              handleChoice(choice, steps[currentStep - 1].component)
+            }
+          >
+            {choice}
+          </button>
+        ))}
       </div>
     </div>
+  </div>
   );
 };
 
