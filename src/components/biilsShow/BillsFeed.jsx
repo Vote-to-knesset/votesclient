@@ -5,6 +5,9 @@ import BillComments from "./BillComments";
 import { useBills, useSelectedBills } from "../../../atoms/atomBills";
 import { useSearchTerm } from "../../../atoms/atomBills";
 import axios from "axios";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useStatistic } from "../../../atoms/atomBills.js";
+import qs from "query-string";
 
 function calculateVoteData(bill) {
   const inFavor = bill.in_favor;
@@ -51,16 +54,20 @@ async function getSelectedBills() {
   }
 }
 
+function useStatisticNavigation() {
+  return useNavigate();
+}
+
 function BillsFeed() {
   const [comment1, setComment1] = useState("");
   const [openComments, setOpenComments] = useState({});
+  const [openStatistic, setopenStatistic] = useState({});
   const [searchTerm] = useSearchTerm();
+  const [statistic, setStatistic] = useStatistic();
   const [Sbills, setSbills] = useState([]);
   const [bills, setBills] = useState([]);
   const [selecteBills, setSelecteBills] = useState([]);
   const [skip, setSkip] = useState(0);
-console.log(comment1);
-
 
   const [isMounted, setIsMounted] = useState(false);
 
@@ -138,8 +145,6 @@ console.log(comment1);
     const token = localStorage.getItem("tokenVote");
     submitVoteToServer(bill.BillID, "against", token);
   };
-  const handleClickOutside = () => {
-    setOpenComments({});
 
       
   };
@@ -187,6 +192,15 @@ console.log(comment1);
     }
   };
 
+  const navigate = useStatisticNavigation();
+  const location = useLocation();
+
+  const handlestatistic = (bill) => {
+    setStatistic(bill);
+    const queryParams = qs.stringify({ billId: bill.BillID });
+    navigate(`/billsFeed/statistic?${queryParams}`, { state: { fromStatistic: true } });
+  };
+
   return (
     <div>
       <Header skip={handleLoadMore} />
@@ -218,6 +232,14 @@ console.log(comment1);
                     קישור למסמך הסבר הצעת החוק
                   </a>
                 )}
+                <div style={{ margin: '10px 0' }}>
+                <button
+                      className="text-green-300 font-bold "
+                      onClick={() => handlestatistic(bill)}
+                      >
+                      👈התפלגות ההצבעות לפי מפלגות👉
+                    </button>
+                </div>
                 {selecteBills.includes(bill.BillID) || Sbills.includes(bill) ? (
                   <GraphVotes voteData={calculateVoteData(bill)} />
                 ) : (

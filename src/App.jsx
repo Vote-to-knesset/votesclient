@@ -11,8 +11,7 @@ import dbTest from "../db/dbTest.js";
 import LoginEntry from "./components/connctWebPages/LoginEntry.jsx";
 import BillsFeed from "./components/biilsShow/BillsFeed.jsx";
 import MainApp from "./components/sign-up/MainApp.jsx";
-
-
+import BillStatistic from "./components/biilsShow/BillStatistic.jsx";
 
 function App() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -22,11 +21,16 @@ function App() {
       <Route path="/">
         <Route index element={<LoginEntry />} />
         <Route path="login" element={<LoginEntry />} />
-        <Route path="billsFeed" element={<BillsFeed />} />
+        <Route path="billsFeed">
+          <Route index element={<BillsFeed />} />
+          {/* Nested route for StatisticPage */}
+          <Route path="statistic" element={<BillStatistic />} />
+        </Route>
         <Route path="choice" element={<MainApp />} />
       </Route>
     )
   );
+
   return (
     <div>
       <RouterProvider router={router} />
