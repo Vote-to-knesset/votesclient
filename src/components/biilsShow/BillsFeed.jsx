@@ -194,12 +194,12 @@ console.log(comment1);
         <div className="flex-none w-full md:w-full flex flex-col justify-end items-end">
           <div
             dir="rtl"
-            className="bill-feed overflow-y-auto p-4 h-[600px]  text-white"
+            className="bill-feed overflow-y-auto p-4 h-[600px]"
           >
             {filteredBills.map((bill) => (
               <div
                 key={bill.BillID}
-                className=" bg-blue-900 rounded p-4 m-4 shadow-lg border border-gray-300"
+                className=" bg-white-200 rounded p-4 m-4 shadow-lg border border-gray-300"
               >
                 <h3 className="text-xl font-semibold mb-2">
                   {bill.name || bill.Name}

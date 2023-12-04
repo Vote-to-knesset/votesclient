@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 const MainApp = () => {
   const [userDetails, setUserDetails] = useUserDetails();
   const [currentStep, setCurrentStep] = useState(1);
+  console.log(userDetails);
 
   const navigatLogin = useNavigate()
 
@@ -79,6 +80,8 @@ const MainApp = () => {
         "https://sever-users-node-js.vercel.app/users/signupUser",
         { ...userDetails, gender: choice }
       );
+      
+      console.log(response);
     } catch (error) {
       console.log(error);
     }
