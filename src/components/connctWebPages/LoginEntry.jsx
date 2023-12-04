@@ -15,7 +15,7 @@ const LoginEntry = () => {
         const token = localStorage.getItem("tokenVote");
         if (token) {
           const response = await axios.post(
-            "http://localhost:5050/votes/userexist",
+            "https://sever-users-node-js.vercel.app/votes/userexist",
             {},
             {
               headers: {
@@ -23,10 +23,9 @@ const LoginEntry = () => {
               },
             }
           );
-          
+
           if (response.status === 200) {
-            
-            navigateBills("/billsFeed"); 
+            navigateBills("/billsFeed");
           } else {
             console.error("Failed to fetch selected bills");
           }
@@ -38,7 +37,7 @@ const LoginEntry = () => {
       }
     }
 
-    userExists(); 
+    userExists();
   }, [navigateBills]);
 
   const handleShowRegistrationForm = () => {
@@ -52,29 +51,32 @@ const LoginEntry = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-cover bg-center bg-fixed bg-no-repeat" style={{ backgroundImage: "url('./src/kn-image.png')" }}>
-      <span className="text-5xl text-black absolute bottom-0 left-0 w-full animate-riseBottom">
+    <div dir="trl" className="flex flex-col justify-center items-center min-h-screen bg-cover bg-center bg-fixed bg-no-repeat bg-gray-200 ">
+      <span className="text-5xl text-black mb-8 text-center">
         ברוכים הבאים לאתר שלנו
       </span>
-      <div id="login-box" className="w-96 h-96 border-2 border-black rounded-2xl bg-black bg-opacity-40 text-center flex ml-60 flex-col justify-between">
-        <div>רישום והתחברות</div>
-        
+      <div
+        id="login-box"
+        className="w-11/12 sm:w-96 h-auto border-2  rounded-2xl bg-gray-200 text-center flex  flex-col justify-between mb-8 "
+        style={{ boxShadow: '0 4px 6px rgba(0, 0, 20, 0.1)' }}
+        >
+        <div className="mb-4">רישום והתחברות</div>
+
         {showRegistrationForm && <RegistrationForm />}
         {showLoginForm && <LoginForm />}
 
         {showLoginForm && (
           <>
             <h2>או</h2>
-            <button className="login-button rounded-full p-5 mr-20 ml-20 mb-20 py-2 bg-blue-500 text-white" onClick={handleShowRegistrationForm}>
+            <button
+              className="login-button rounded-full p-5 mr-4 ml-4 mb-4 py-2 bg-blue-500 text-white hover:bg-blue-700"
+              onClick={handleShowRegistrationForm}
+            >
               הירשם
             </button>
           </>
         )}
-        {!showLoginForm && (
-          <button className="login-button rounded-full p-5 mr-20 ml-20 mb-20 py-2 bg-blue-500 text-white " onClick={handleShowLoginForm}>
-            התחבר
-          </button>
-        )}
+    
       </div>
     </div>
   );

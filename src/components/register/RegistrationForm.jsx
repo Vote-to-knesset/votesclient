@@ -3,11 +3,13 @@ import axios from "axios";
 import useUserDetails from "../../../atoms/atomUser";
 import { useNavigate } from "react-router-dom";
 
-
 const RegistrationForm = () => {
   const [userDetails, setUserDetails] = useUserDetails();
-  const navigatRegister = useNavigate()
+  const navigatRegister = useNavigate();
 
+  const [isLoading, setIsLoading] = useState(false);
+
+  
   const [state, setState] = useState({
     email: "",
     code: "",
@@ -22,20 +24,18 @@ const RegistrationForm = () => {
   const handleInputChange = (event) => {
     const { id, value } = event.target;
     setState({ ...state, [id]: value });
-
-
   };
 
   const handleEmailSubmit = async (event) => {
     event.preventDefault();
-    const { email } = state; 
+    const { email } = state;
     if (email.includes("@") && email.includes(".")) {
       try {
+        setIsLoading(true);
         const response = await axios.post(
-          "http://localhost:5050/users/signup",
+          "https://sever-users-node-js.vercel.app/users/signup",
           { email }
         );
-      
 
         if (response.status === 200) {
           setUserDetails({ ...userDetails, email: email });
@@ -57,6 +57,9 @@ const RegistrationForm = () => {
           serverResponse: "An error occurred. Please try again later.",
         });
       }
+      finally{
+        setIsLoading(false);
+      }
     } else {
       setState({
         ...state,
@@ -69,11 +72,10 @@ const RegistrationForm = () => {
     event.preventDefault();
     const { email, code } = state;
 
-
     try {
       const response = await axios.post(
-        "http://localhost:5050/users/verifyEmail",
-        {email, code }
+        "https://sever-users-node-js.vercel.app/users/verifyEmail",
+        { email, code }
       );
 
       if (response.status === 200) {
@@ -103,14 +105,17 @@ const RegistrationForm = () => {
     const { username, password } = state;
 
     try {
-      const response = await axios.post(
-        "http://localhost:5050/users/user",
-        { username }
-      );
+      const response = await axios.post("https://sever-users-node-js.vercel.app/users/user", {
+        username,
+      });
 
       if (response.status === 200) {
         console.log(username);
-        setUserDetails({ ...userDetails, password: password ,userName: username});
+        setUserDetails({
+          ...userDetails,
+          password: password,
+          userName: username,
+        });
         setState({
           ...state,
           serverResponse: "Registration Successful!",
@@ -151,8 +156,17 @@ const RegistrationForm = () => {
           />
           <button
             type="submit"
-            className="rounded-full px-5 py-2 bg-blue-500 text-white"
+            className={`rounded-2xl relative px-5 py-2 bg-blue-500 text-white transition duration-300 hover:bg-blue-700 ${
+              isLoading ? "pointer-events-none" : ""
+            }`}
+            disabled={isLoading}
           >
+            {isLoading && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-blue-900"></div>
+              </div>
+            )}
+            {/* {!isLoading && (<p>שלח קוד</p>) }   */}
             שלח קוד
           </button>
           {serverResponse && <p>{serverResponse}</p>}
@@ -174,7 +188,7 @@ const RegistrationForm = () => {
           />
           <button
             type="submit"
-            className="rounded-full px-5 py-2 bg-blue-500 text-white"
+            className="rounded-full px-5 py-2 bg-blue-500 text-white hover:bg-blue-700"
           >
             אשר קוד
           </button>
@@ -204,7 +218,7 @@ const RegistrationForm = () => {
           />
           <button
             type="submit"
-            className="rounded-full px-5 py-2 bg-blue-500 text-white"
+            className="rounded-full px-5 py-2 bg-blue-500 text-white hover:bg-blue-700"
           >
             התחבר
           </button>
