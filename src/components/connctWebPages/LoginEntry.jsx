@@ -11,7 +11,7 @@ const LoginEntry = () => {
 
   debugger;
 
-  
+
 
   useEffect(() => {
     async function userExists() {
@@ -59,7 +59,7 @@ const LoginEntry = () => {
       <div className="max-w-3xl w-full mx-auto p-4">
         <div className="flex flex-col md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-8 bg-white rounded-lg shadow-md overflow-hidden"
          style={{
-            backgroundImage: `url(${'./src/kns-img.jpg'})`,
+            backgroundImage: `url(${'/public/kns-img.jpg'})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}>
