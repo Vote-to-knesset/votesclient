@@ -78,7 +78,6 @@ function BillsFeed() {
         setSelecteBills(selectedData);
 
         const billsData = await getBills(skip);
-        console.log(billsData);
         let sortedBills = [];
         let selectedBills = [];
         let unselectedBills = [];
@@ -96,8 +95,11 @@ function BillsFeed() {
         } else {
           sortedBills = billsData;
         }
-
-        setBills(sortedBills);
+        if (selectedBills.length >= 49) {
+          handleLoadMore();
+        } else {
+          setBills(sortedBills);
+        }
       };
 
       fetchData();
@@ -164,14 +166,15 @@ function BillsFeed() {
     setSkip(newSkip);
     try {
       const moreBillsData = await getBills(newSkip);
+      const selectedData = await getSelectedBills();
       let sortedBills = [];
       let selectedBills = [];
       let unselectedBills = [];
 
-      const selectedSet = new Set(selecteBills);
+      const selectedSet = new Set(selectedData);
 
       moreBillsData.forEach((bill) => {
-        if (selectedSet.has(bill.BillID)) {
+        if (selectedSet.has(bill.BillID) || Sbills.includes(bill)) {
           selectedBills.push(bill);
         } else {
           unselectedBills.push(bill);
@@ -204,7 +207,7 @@ function BillsFeed() {
     <div>
       <Header skip={handleLoadMore} />
       <div className="flex justify-center items-center h-screen bg-gray-200">
-        <div className="flex-none w-full md:w-full flex flex-col justify-end items-end">
+        <div className="flex-none w-full md:w-2/3 flex flex-col justify-end items-end">
           <div dir="rtl" className="bill-feed overflow-y-auto p-4 h-[600px]">
             {filteredBills.map((bill) => (
               <div
@@ -254,9 +257,7 @@ function BillsFeed() {
                     </a>
                   </div>
                 )}
-                <div
-                  className="flex items-center mt-2 mr-2"
-                >
+                <div className="flex items-center mt-2 mr-2">
                   <svg
                     viewBox="0 0 1024 1024"
                     fill="currentColor"
@@ -296,11 +297,12 @@ function BillsFeed() {
                 <div className="flex justify-center border-t dark:border-gray-400 mt-6">
                   <button onClick={() => toggleComment(bill)}>
                     <svg
-                      className="mt-2 mb-2"
+                      className="mt-2"
                       viewBox="0 0 24 24"
                       fill="currentColor"
                       height="1.5em"
                       width="1.5em"
+                      color="gray"
                     >
                       <path d="M7 7h10v2H7zm0 4h7v2H7z" />
                       <path d="M20 2H4c-1.103 0-2 .897-2 2v18l5.333-4H20c1.103 0 2-.897 2-2V4c0-1.103-.897-2-2-2zm0 14H6.667L4 18V4h16v12z" />
@@ -311,7 +313,9 @@ function BillsFeed() {
                 {openComments[bill.BillID] && (
                   <BillComments
                     billId={comment1}
+                    billName = {bill.Name || bill.name}
                     onClose={handleClickOutside}
+
                   />
                 )}
               </div>

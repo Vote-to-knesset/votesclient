@@ -1,53 +1,42 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 function GraphVotes({ voteData }) {
-  const totalVotes = voteData.in_favor + voteData.against;
-  const percentInFavor = (voteData.in_favor / totalVotes) * 100;
-  const percentAgainst = (voteData.against / totalVotes) * 100;
+  const [percentInFavor, setPercentInFavor] = useState(0);
+  const [percentAgainst, setPercentAgainst] = useState(0);
+
+  useEffect(() => {
+    const totalVotes = voteData.in_favor + voteData.against;
+    setPercentInFavor((voteData.in_favor / totalVotes) * 100);
+    setPercentAgainst((voteData.against / totalVotes) * 100);
+  }, [voteData]);
 
   const greenBarStyle = {
     width: `${percentInFavor}%`,
-    animation: percentInFavor > 0 ? `fillGreen 1s ease-in-out` : '',
+    transition: 'width 1s ease-in-out',
+    background: `linear-gradient(to right, #00cc00, #33cc33)`, 
   };
 
   const redBarStyle = {
     width: `${percentAgainst}%`,
-    animation: percentAgainst > 0 ? `fillRed 1s ease-in-out` : '',
+    transition: 'width 1s ease-in-out',
+    background: `linear-gradient(to right, #ff3333, #ff6666)`, 
   };
 
   return (
-    <div>
-      <style>
-        {`
-          @keyframes fillGreen {
-            from {
-              width: 0;
-              background-color: transparent;
-            }
-            to {
-              width: ${percentInFavor}%;
-              background-color: green;
-            }
-          }
-
-          @keyframes fillRed {
-            from {
-              width: 0;
-              background-color: transparent;
-            }
-            to {
-              width: ${percentAgainst}%;
-              background-color: red;
-            }
-          }
-        `}
-      </style>
-      <div className="bg-green-400 text-white w-32 h-16 rounded-md m-2" style={greenBarStyle}>
-        {`${percentInFavor.toFixed(2)}% בעד`}
+    <div className="flex flex-col w-full md:w-1/2">
+       <div className="bg-green-200 text-white h-16 rounded-md m-2 relative" style={{ width: '100%' }}>
+        <div className="absolute inset-0 flex items-center justify-center">
+          {`${percentInFavor.toFixed(2)}% בעד`}
+        </div>
+        <div className="h-16 rounded-md" style={greenBarStyle}></div>
       </div>
-      <div className="bg-red-400 text-white w-32 h-16 rounded-md m-2" style={redBarStyle}>
-        {`${percentAgainst.toFixed(2)}% נגד`}
+      <div className="bg-red-200 text-white h-16 rounded-md m-2 relative" style={{ width: '100%' }}>
+        <div className="absolute inset-0 flex items-center justify-center">
+          {`${percentAgainst.toFixed(2)}% נגד`}
+        </div>
+        <div className="h-16 rounded-md" style={redBarStyle}></div>
       </div>
+     
     </div>
   );
 }
