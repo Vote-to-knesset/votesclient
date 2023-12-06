@@ -73,7 +73,7 @@ function BillComment({ billId, billName, onClose }) {
     try {
       const token = localStorage.getItem("tokenVote");
       const response = await axios.post(
-        "https://sever-users-node-js.vercel.app/votes/adddiscussion",
+        "https://sever-users-node-js.vercel.app/votes/addlike",
         { billId, discussionTitle, comment },
         {
           headers: {
@@ -82,7 +82,6 @@ function BillComment({ billId, billName, onClose }) {
           },
         }
       );
-
       if (response.status === 200) {
         console.log(" successfully");
       } else {
@@ -221,6 +220,13 @@ function BillComment({ billId, billName, onClose }) {
                     <div className="flex flex-row text-xs text-black">
                       <div className="rounded-full bg-blue p-1">
                         <svg
+                          onClick={() =>
+                            addLike(
+                              billId,
+                              selectedDiscussion.title,
+                              comment.text
+                            )
+                          }
                           viewBox="0 0 1024 1024"
                           fill="currentColor"
                           height="1em"
@@ -236,12 +242,7 @@ function BillComment({ billId, billName, onClose }) {
                       {calculateTimeElapsed(comment.timestamp)}{" "}
                     </div>
                   </div>
-                  <div
-                    onClick={() =>
-                      addLike(billId, discussionTitle, comment.text)
-                    }
-                    className="bg-white  border border-white dark:border-gray-200 rounded-full float-right -mt-8 mr-0.5 flex shadow items-center"
-                  ></div>
+                  <div className="bg-white  border border-white dark:border-gray-200 rounded-full float-right -mt-8 mr-0.5 flex shadow items-center"></div>
                 </div>
               ))}
             </div>

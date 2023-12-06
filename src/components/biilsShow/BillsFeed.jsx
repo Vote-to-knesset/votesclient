@@ -280,13 +280,13 @@ function BillsFeed() {
                   <div>
                     <button
                       onClick={() => handleVoteClickFor(bill, "in_favor")}
-                      className="bg-green-400 hover:bg-green-600 text-white w-32 h-16 rounded-md m-2 transition duration-300 ease-in-out"
+                      className="bg-green-400 hover:bg-green-600 text-white w-32 h-14 rounded-md m-2 transition duration-300 ease-in-out"
                     >
                       בעד
                     </button>
                     <button
                       onClick={() => handleVoteClickAga(bill, "against")}
-                      className="bg-red-400 hover:bg-red-600 text-white w-32 h-16 rounded-md m-2 transition duration-300 ease-in-out"
+                      className="bg-red-400 hover:bg-red-600 text-white w-32 h-14 rounded-md m-2 transition duration-300 ease-in-out"
                     >
                       נגד
                     </button>
