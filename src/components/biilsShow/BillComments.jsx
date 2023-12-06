@@ -70,11 +70,13 @@ function BillComment({ billId, billName, onClose }) {
   }, []);
 
   const addLike = async (billId, discussionTitle, comment) => {
+    let commentText = comment
+    console.log(billId, discussionTitle, commentText);
     try {
       const token = localStorage.getItem("tokenVote");
       const response = await axios.post(
         "https://sever-users-node-js.vercel.app/votes/addlike",
-        { billId, discussionTitle, comment },
+        { billId, discussionTitle, commentText },
         {
           headers: {
             "Content-Type": "application/json",
