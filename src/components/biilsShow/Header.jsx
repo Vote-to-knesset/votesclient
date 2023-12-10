@@ -30,14 +30,14 @@ function Header({skip}) {
         
       </div>
       <Search  />
-        <button className="mr-4 ml-4   hover:scale-100  rounded-full transition duration-300 ease-in-out"
+        <button className="mr-4 ml-4   hover:bg-gray-300 p-1 rounded-full transition duration-300 ease-in-out"
         onClick={skip}
         >
           <svg
             viewBox="0 0 24 24"
             fill="gray-200"
-            height="2.5em"
-            width="2.5em"
+            height="2em"
+            width="2em"
             
 
           >

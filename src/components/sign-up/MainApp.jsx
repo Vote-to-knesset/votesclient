@@ -135,7 +135,7 @@ const MainApp = () => {
         {steps[currentStep - 1].choices.map((choice, index) => (
           <button
             key={index}
-            className="w-full sm:px-20 py-4 sm:py-10 bg-blue-500 text-white rounded cursor-pointer"
+            className="w-full sm:px-20 py-4 sm:py-10 bg-blue-500 hover:bg-blue-700 text-white rounded cursor-pointer"
             onClick={() =>
               handleChoice(choice, steps[currentStep - 1].component)
             }

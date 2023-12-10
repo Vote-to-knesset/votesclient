@@ -15,7 +15,7 @@ const LoginEntry = () => {
   const navigateChoice = useNavigate();
 
   const responseMessage = async (response) => {
-    let googleToken = response.credential
+    let googleToken = response.credential;
     try {
       const response = await axios.post(
         "https://sever-users-node-js.vercel.app/users/googleLogin",
@@ -30,7 +30,12 @@ const LoginEntry = () => {
 
       if (response.status === 200) {
         console.log(response.data);
-        setUserDetails({ ...userDetails, google:true , userName:response.data.userName, email:response.data.email });
+        setUserDetails({
+          ...userDetails,
+          google: true,
+          userName: response.data.userName,
+          email: response.data.email,
+        });
 
         navigateChoice("/choice");
       } else {
@@ -116,20 +121,28 @@ const LoginEntry = () => {
               {showLoginForm && (
                 <>
                   <div dir="rtl">
-                    <h2 className="text-center mb-4">אין לך חשבון ?</h2>
-                    <button
-                      className="block w-full rounded-full py-3 bg-blue-500 text-white hover:bg-blue-700"
-                      onClick={handleShowRegistrationForm}
-                    >
-                      הרשמה{" "}
-                    </button>
-                  </div>
+                    <h3 className="flex items-center justify-center mb-2">
+                      או
+                    </h3>
+                    <div class="flex items-center justify-center  bg-gray-100 mt-2 mb-4">
+                      <GoogleLogin
+                        onSuccess={responseMessage}
+                        onError={errorMessage}
+                      />
+                    </div>
 
-                  <div class="flex items-center justify-center  bg-gray-100 ">
-                    <GoogleLogin
-                      onSuccess={responseMessage}
-                      onError={errorMessage}
-                    />
+                    <div className="border border-gray-300 p-4 mx-auto max-w-md text-center flex flex-col items-center">
+                      <p className="mb-4">
+                        אין לך חשבון ? <span className="ml-2"></span>
+                      </p>
+
+                      <button
+                        className="py-2 px-8 bg-blue-500 text-white hover:bg-blue-700 rounded-2xl"
+                        onClick={handleShowRegistrationForm}
+                      >
+                        הרשמה{" "}
+                      </button>
+                    </div>
                   </div>
                 </>
               )}
