@@ -76,11 +76,27 @@ const MainApp = () => {
 
   const updateUserDetailsAndSubmit = async (choice, step) => {
     try {
+      if (userDetails.google){
+        console.log(choice);
+        setUserDetails({ ...userDetails,  gender: choice })
+        const response = await axios.post(
+          "https://sever-users-node-js.vercel.app/users/signupWithGoogle",
+          userDetails
+        );
+        console.log(userDetails);
+          if (response.status === 200){
+            const { token } = response.data;
+
+            localStorage.setItem('tokenVote', token);
+            navigatLogin('/billsFeed')
+          }
+      }
+      else{
       const response = await axios.post(
         "https://sever-users-node-js.vercel.app/users/signupUser",
         { ...userDetails, gender: choice }
       );
-      
+      }
       console.log(response);
     } catch (error) {
       console.log(error);

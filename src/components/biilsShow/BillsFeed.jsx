@@ -62,17 +62,19 @@ function BillsFeed() {
   const [comment1, setComment1] = useState("");
   const [openComments, setOpenComments] = useState({});
   const [openStatistic, setopenStatistic] = useState({});
-  const [searchTerm] = useSearchTerm();
+  const [searchTerm, setSearchTerm] = useSearchTerm();
   const [statistic, setStatistic] = useStatistic();
   const [Sbills, setSbills] = useState([]);
   const [bills, setBills] = useState([]);
   const [selecteBills, setSelecteBills] = useState([]);
   const [skip, setSkip] = useState(0);
+  const [isLoadingFeed, setIsLoadingFeed] = useState(false);
 
   const [isMounted, setIsMounted] = useState(false);
 
   useLayoutEffect(() => {
     if (!isMounted) {
+      setIsLoadingFeed(true);
       const fetchData = async () => {
         const selectedData = await getSelectedBills();
         setSelecteBills(selectedData);
@@ -92,20 +94,47 @@ function BillsFeed() {
             }
           });
           sortedBills = [...unselectedBills, ...selectedBills];
+          setIsLoadingFeed(false);
         } else {
           sortedBills = billsData;
+          setIsLoadingFeed(false);
         }
         if (selectedBills.length >= 49) {
           handleLoadMore();
         } else {
+
           setBills(sortedBills);
         }
       };
 
       fetchData();
       setIsMounted(true);
+      
     }
   }, [isMounted, skip]);
+
+  useEffect(() => {
+    async function fetchData() {
+      if (searchTerm) {
+        try {
+          const data = { name: searchTerm };
+          console.log(data);
+          const response = await axios.post(
+            "https://kns-data-votes.onrender.com/api/search",
+            data
+          );
+          const billsSearch = response.data;
+          setBills(billsSearch);
+          setSearchTerm("");
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    }
+
+    fetchData();
+  }, [searchTerm]);
+
   const submitVoteToServer = async (billId, vote, token) => {
     try {
       const response = await axios.post(
@@ -155,11 +184,11 @@ function BillsFeed() {
       [billID]: !prevComments[billID],
     }));
   };
-  const filteredBills = bills.filter(
-    (bill) =>
-      (bill.name && bill.name.includes(searchTerm)) ||
-      (bill.Name && bill.Name.includes(searchTerm))
-  );
+  // const filteredBills = bills.filter(
+  //   (bill) =>
+  //     (bill.name && bill.name.includes(searchTerm)) ||
+  //     (bill.Name && bill.Name.includes(searchTerm))
+  // );
 
   const handleLoadMore = async () => {
     const newSkip = skip + 50;
@@ -206,10 +235,62 @@ function BillsFeed() {
   return (
     <div>
       <Header skip={handleLoadMore} />
+      {isLoadingFeed && (
+        <div>
+        <div className="max-w-xl mx-auto bg-gray-200 ">
+          <div className="p-4 bg-white border border-primary rounded-md">
+            <div className="flex">
+              <div className="mr-4 bg-gray-200 border border-gray-200 h-16 w-16 rounded animate-pulse"></div>
+              <div className="space-y-1 flex flex-col w-full">
+                <div className=" w-full flex items-center">
+                  <div className="bg-gray-200 border border-gray-200 w-60 h-5 animate-pulse"></div>
+                  <div className="ml-4 bg-ternary w-12 h-5 animate-pulse"></div>
+                </div>
+                <div className="bg-gray-200 border border-gray-200 w-36 h-5 animate-pulse"></div>
+                <div className="bg-gray-200 border border-gray-200 w-full h-44 animate-pulse"></div>
+              </div>
+            </div>
+
+            <div className="mt-4 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="bg-gray-200 border border-gray-200 w-16 h-5 animate-pulse"></div>
+                <span className="bg-tertiary h-1 w-1 rounded animate-pulse"></span>
+                <div className="bg-gray-200 border border-gray-200 w-16 h-5 animate-pulse"></div>
+              </div>
+              <div className="bg-gray-200 border border-gray-200 w-16 h-5 animate-pulse"></div>
+            </div>
+          </div>
+        </div>
+          <div className="max-w-xl mx-auto bg-gray-200 ">
+          <div className="p-4 bg-white border border-primary rounded-md">
+            <div className="flex">
+              <div className="mr-4 bg-gray-200 border border-gray-200 h-16 w-16 rounded animate-pulse"></div>
+              <div className="space-y-1 flex flex-col w-full">
+                <div className=" w-full flex items-center">
+                  <div className="bg-gray-200 border border-gray-200 w-60 h-5 animate-pulse"></div>
+                  <div className="ml-4 bg-ternary w-12 h-5 animate-pulse"></div>
+                </div>
+                <div className="bg-gray-200 border border-gray-200 w-36 h-5 animate-pulse"></div>
+                <div className="bg-gray-200 border border-gray-200 w-full h-44 animate-pulse"></div>
+              </div>
+            </div>
+
+            <div className="mt-4 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="bg-gray-200 border border-gray-200 w-16 h-5 animate-pulse"></div>
+                <span className="bg-tertiary h-1 w-1 rounded animate-pulse"></span>
+                <div className="bg-gray-200 border border-gray-200 w-16 h-5 animate-pulse"></div>
+              </div>
+              <div className="bg-gray-200 border border-gray-200 w-16 h-5 animate-pulse"></div>
+            </div>
+          </div>
+        </div>
+        </div>
+      )}
       <div className="flex justify-center items-center h-screen bg-gray-200">
         <div className="flex-none w-full md:w-2/3 flex flex-col justify-end items-end">
           <div dir="rtl" className="bill-feed overflow-y-auto p-4 h-[600px]">
-            {filteredBills.map((bill) => (
+            {bills.map((bill) => (
               <div
                 key={bill.BillID}
                 className=" bg-white rounded p-4 m-4 shadow-lg border border-gray-300"
@@ -252,12 +333,15 @@ function BillsFeed() {
                     >
                       <path d="M854.6 288.6L639.4 73.4c-6-6-14.1-9.4-22.6-9.4H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V311.3c0-8.5-3.4-16.7-9.4-22.7zM790.2 326H602V137.8L790.2 326zm1.8 562H232V136h302v216a42 42 0 0042 42h216v494zM504 618H320c-4.4 0-8 3.6-8 8v48c0 4.4 3.6 8 8 8h184c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8zM312 490v48c0 4.4 3.6 8 8 8h384c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8H320c-4.4 0-8 3.6-8 8z" />
                     </svg>
-                    <a href={bill.document} className="text-blue-500 mr-2 ">
+                    <a
+                      href={bill.document}
+                      className="text-blue-500 mr-2 hover:underline  "
+                    >
                       קישור למסמך הסבר הצעת החוק
                     </a>
                   </div>
                 )}
-                <div className="flex items-center mt-2 mr-2">
+                <div className="flex items-center mt-2 mr-2 hover:underline ">
                   <svg
                     viewBox="0 0 1024 1024"
                     fill="currentColor"
@@ -294,10 +378,10 @@ function BillsFeed() {
                 )}
                 <p>סך כל ההצבעות : {bill.in_favor + bill.against}</p>
 
-                <div className="flex justify-center border-t dark:border-gray-400 mt-6">
+                <div className="flex justify-center border-t dark:border-gray-400 mt-6 ">
                   <button onClick={() => toggleComment(bill)}>
                     <svg
-                      className="mt-2"
+                      className="mt-2 hover:scale-110 "
                       viewBox="0 0 24 24"
                       fill="currentColor"
                       height="1.5em"
@@ -313,9 +397,8 @@ function BillsFeed() {
                 {openComments[bill.BillID] && (
                   <BillComments
                     billId={comment1}
-                    billName = {bill.Name || bill.name}
+                    billName={bill.Name || bill.name}
                     onClose={handleClickOutside}
-
                   />
                 )}
               </div>

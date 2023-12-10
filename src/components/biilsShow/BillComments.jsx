@@ -54,6 +54,7 @@ function BillComment({ billId, billName, onClose }) {
   const [discussions, setDiscussions] = useState([]);
   const [selectedDiscussion, setSelectedDiscussion] = useState(null);
   const [comments, setComments] = useState([]);
+  const [likedComments, setLikedComments] = useState([]);
 
   useLayoutEffect(() => {
     const fetchDiscussions = async () => {
@@ -70,28 +71,46 @@ function BillComment({ billId, billName, onClose }) {
   }, []);
 
   const addLike = async (billId, discussionTitle, comment) => {
-    let commentText = comment
+    let commentText = comment;
     console.log(billId, discussionTitle, commentText);
-    try {
-      const token = localStorage.getItem("tokenVote");
-      const response = await axios.post(
-        "https://sever-users-node-js.vercel.app/votes/addlike",
-        { billId, discussionTitle, commentText },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
+    if (!hasLikedComment(commentText)) {
+      try {
+        const token = localStorage.getItem("tokenVote");
+        const response = await axios.post(
+          "https://sever-users-node-js.vercel.app/votes/addlike",
+          { billId, discussionTitle, commentText },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response.status === 200) {
+          setLikedComments([...likedComments, commentText]);
+          updateLikesCount(commentText);
+          console.log(" successfully");
+        } else {
+          console.error("Failed to update like");
         }
-      );
-      if (response.status === 200) {
-        console.log(" successfully");
-      } else {
-        console.error("Failed to update like");
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.error(error);
     }
+  };
+
+  const updateLikesCount = (commentText) => {
+    const updatedComments = comments.map((comment) => {
+      if (comment.text === commentText) {
+        return { ...comment, like: comment.like + 1 };
+      }
+      return comment;
+    });
+    setComments(updatedComments);
+  };
+
+  const hasLikedComment = (commentText) => {
+    return likedComments.includes(commentText);
   };
 
   const addDiscussion = async (billId, discussionTitle) => {
@@ -154,6 +173,8 @@ function BillComment({ billId, billName, onClose }) {
         id: selectedDiscussion.comments.length + 1,
         text: comment,
         timestamp: new Date().toISOString(),
+        like:0,
+        
       };
 
       const updatedComments = [...comments, newComment];
@@ -211,7 +232,7 @@ function BillComment({ billId, billName, onClose }) {
               {comments.map((comment) => (
                 <div
                   key={comment.text}
-                  className="bg-white text-black p-4 antialiased border-b border-gray-300"
+                  className=" text-black p-4 antialiased border-b border-gray-300"
                 >
                   <div className="flex justify-between items-center">
                     <div className="bg-gray-200 rounded-2xl p-2">
@@ -220,7 +241,7 @@ function BillComment({ billId, billName, onClose }) {
                   </div>
                   <div className="  ">
                     <div className="flex flex-row text-xs text-black">
-                      <div className="rounded-full bg-blue p-1">
+                      <div className="rounded-full bg-blue p-1 hover:scale-150 ">
                         <svg
                           onClick={() =>
                             addLike(
@@ -231,14 +252,16 @@ function BillComment({ billId, billName, onClose }) {
                           }
                           viewBox="0 0 1024 1024"
                           fill="currentColor"
-                          height="1em"
-                          width="1em"
-                          color="blue"
+                          height="1.5em"
+                          width="1.5em"
+                          color={hasLikedComment(comment.text) ? "blue" : "gray"}
+                          className="..."
+                          disabled={hasLikedComment(comment.text)}
                         >
                           <path d="M885.9 533.7c16.8-22.2 26.1-49.4 26.1-77.7 0-44.9-25.1-87.4-65.5-111.1a67.67 67.67 0 00-34.3-9.3H572.4l6-122.9c1.4-29.7-9.1-57.9-29.5-79.4A106.62 106.62 0 00471 99.9c-52 0-98 35-111.8 85.1l-85.9 311h-.3v428h472.3c9.2 0 18.2-1.8 26.5-5.4 47.6-20.3 78.3-66.8 78.3-118.4 0-12.6-1.8-25-5.4-37 16.8-22.2 26.1-49.4 26.1-77.7 0-12.6-1.8-25-5.4-37 16.8-22.2 26.1-49.4 26.1-77.7-.2-12.6-2-25.1-5.6-37.1zM112 528v364c0 17.7 14.3 32 32 32h65V496h-65c-17.7 0-32 14.3-32 32z" />
                         </svg>
                       </div>
-                      <span className="text-sm ml-1 text-gray-500">
+                      <span className="text-sm ml-6 text-gray-500 ">
                         {comment.like}
                       </span>
                       {calculateTimeElapsed(comment.timestamp)}{" "}

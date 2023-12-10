@@ -1,8 +1,22 @@
-import { useSearchTerm } from "../../../atoms/atomBills";
+import { useSearchTerm, useBills } from "../../../atoms/atomBills";
+
+
+
+
 
 function Search() {
   const [searchTerm, setSearchTerm] = useSearchTerm();
 
+
+
+
+  function handleKeyPress(e) {
+    if (e.key === 'Enter') {
+      setSearchTerm(e.target.value);
+     
+    }
+  }
+  
   return (
     <div dir="rtl">
       <div className="relative text-gray-600 ">
@@ -11,8 +25,7 @@ function Search() {
           name="serch"
           placeholder="חפש הצעת חוק"
           className="bg-gray-300 h-10 px-10 pr-10 rounded-full text-sm focus:outline-none"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyDown={handleKeyPress}
           required
         />
         <button type="submit" className="absolute right-0 top-0 mt-3 mr-4">

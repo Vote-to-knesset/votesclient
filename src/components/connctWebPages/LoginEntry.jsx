@@ -3,15 +3,46 @@ import LoginForm from "../login/LoginForm";
 import RegistrationForm from "../register/RegistrationForm";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { GoogleLogin } from "@react-oauth/google";
+import useUserDetails from "../../../atoms/atomUser";
 
 const LoginEntry = () => {
   const [showRegistrationForm, setShowRegistrationForm] = useState(false);
   const [showLoginForm, setShowLoginForm] = useState(true);
+  const [userDetails, setUserDetails] = useUserDetails();
+
   const navigateBills = useNavigate();
+  const navigateChoice = useNavigate();
 
-  debugger;
+  const responseMessage = async (response) => {
+    let googleToken = response.credential
+    try {
+      const response = await axios.post(
+        "https://sever-users-node-js.vercel.app/users/googleLogin",
+        {},
+        {
+          headers: {
+            Authorization: googleToken,
+          },
+        }
+      );
+      console.log(response);
 
+      if (response.status === 200) {
+        console.log(response.data);
+        setUserDetails({ ...userDetails, google:true , userName:response.data.userName, email:response.data.email });
 
+        navigateChoice("/choice");
+      } else {
+        console.error("Failed to fetch google accounte");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const errorMessage = (error) => {
+    console.log(error);
+  };
 
   useEffect(() => {
     async function userExists() {
@@ -57,12 +88,14 @@ const LoginEntry = () => {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="max-w-3xl w-full mx-auto p-4">
-        <div className="flex flex-col md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-8 bg-white rounded-lg shadow-md overflow-hidden"
-         style={{
-            backgroundImage: `url(${'/kns-img.jpg'})`,
+        <div
+          className="flex flex-col md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-8 bg-white rounded-lg shadow-md overflow-hidden"
+          style={{
+            backgroundImage: `url(${"/kns-img.jpg"})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
-          }}>
+          }}
+        >
           <div className="flex-1 py-8 px-4 md:px-8">
             <h1 className="text-4xl font-bold text-center mb-8">
               הצביעו עכשיו
@@ -82,13 +115,21 @@ const LoginEntry = () => {
               {showLoginForm && <LoginForm />}
               {showLoginForm && (
                 <>
-                <div dir="rtl">
-                  <h2  className="text-center mb-4">אין לך חשבון ?</h2>
-                  <button
-                    className="block w-full rounded-full py-3 bg-blue-500 text-white hover:bg-blue-700"
-                    onClick={handleShowRegistrationForm}
-                  >
-הרשמה                  </button>
+                  <div dir="rtl">
+                    <h2 className="text-center mb-4">אין לך חשבון ?</h2>
+                    <button
+                      className="block w-full rounded-full py-3 bg-blue-500 text-white hover:bg-blue-700"
+                      onClick={handleShowRegistrationForm}
+                    >
+                      הרשמה{" "}
+                    </button>
+                  </div>
+
+                  <div class="flex items-center justify-center  bg-gray-100 ">
+                    <GoogleLogin
+                      onSuccess={responseMessage}
+                      onError={errorMessage}
+                    />
                   </div>
                 </>
               )}

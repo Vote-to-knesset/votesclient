@@ -7,7 +7,6 @@ const RegistrationForm = () => {
   const [userDetails, setUserDetails] = useUserDetails();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-console.log(userDetails);
   const [formData, setFormData] = useState({
     email: "",
     code: "",
@@ -192,6 +191,7 @@ console.log(userDetails);
             )}
             הירשם
           </button>
+
 
         </form>
       )}
