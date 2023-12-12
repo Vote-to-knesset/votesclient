@@ -24,7 +24,7 @@ function Search() {
           type="search"
           name="serch"
           placeholder="חפש הצעת חוק"
-          className="bg-gray-300 h-10 px-10 pr-10 rounded-full text-sm focus:outline-none"
+          className="bg-gray-300 h-10 px-4 md:px-12 pr-10 rounded-full text-sm focus:outline-none"
           onKeyDown={handleKeyPress}
           required
         />

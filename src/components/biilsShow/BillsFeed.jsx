@@ -99,7 +99,7 @@ function BillsFeed() {
           sortedBills = billsData;
           setIsLoadingFeed(false);
         }
-        if (selectedBills.length >= 49) {
+        if (selectedBills.length >= 19) {
           handleLoadMore();
         } else {
           setBills(sortedBills);
@@ -189,7 +189,7 @@ function BillsFeed() {
   // );
 
   const handleLoadMore = async () => {
-    const newSkip = skip + 50;
+    const newSkip = skip + 20;
     setSkip(newSkip);
     try {
       const moreBillsData = await getBills(newSkip);
@@ -232,62 +232,64 @@ function BillsFeed() {
 
   return (
     <div>
-      <Header skip={handleLoadMore} />
-      {isLoadingFeed && (
-        <div>
-          <div className="max-w-xl mx-auto bg-gray-200 ">
-            <div className="p-4 bg-white border border-primary rounded-md">
-              <div className="flex">
-                <div className="mr-4 bg-gray-200 border border-gray-200 h-16 w-16 rounded animate-pulse"></div>
-                <div className="space-y-1 flex flex-col w-full">
-                  <div className=" w-full flex items-center">
-                    <div className="bg-gray-200 border border-gray-200 w-60 h-5 animate-pulse"></div>
-                    <div className="ml-4 bg-ternary w-12 h-5 animate-pulse"></div>
-                  </div>
-                  <div className="bg-gray-200 border border-gray-200 w-36 h-5 animate-pulse"></div>
-                  <div className="bg-gray-200 border border-gray-200 w-full h-44 animate-pulse"></div>
-                </div>
-              </div>
+      <Header />
 
-              <div className="mt-4 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="bg-gray-200 border border-gray-200 w-16 h-5 animate-pulse"></div>
-                  <span className="bg-tertiary h-1 w-1 rounded animate-pulse"></span>
-                  <div className="bg-gray-200 border border-gray-200 w-16 h-5 animate-pulse"></div>
-                </div>
-                <div className="bg-gray-200 border border-gray-200 w-16 h-5 animate-pulse"></div>
-              </div>
-            </div>
-          </div>
-          <div className="max-w-xl mx-auto bg-gray-200 mt-8 ">
-            <div className="p-4 bg-white border border-primary rounded-md">
-              <div className="flex">
-                <div className="mr-4 bg-gray-200 border border-gray-200 h-16 w-16 rounded animate-pulse"></div>
-                <div className="space-y-1 flex flex-col w-full">
-                  <div className=" w-full flex items-center">
-                    <div className="bg-gray-200 border border-gray-200 w-60 h-5 animate-pulse"></div>
-                    <div className="ml-4 bg-ternary w-12 h-5 animate-pulse"></div>
-                  </div>
-                  <div className="bg-gray-200 border border-gray-200 w-36 h-5 animate-pulse"></div>
-                  <div className="bg-gray-200 border border-gray-200 w-full h-44 animate-pulse"></div>
-                </div>
-              </div>
-
-              <div className="mt-4 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="bg-gray-200 border border-gray-200 w-16 h-5 animate-pulse"></div>
-                  <span className="bg-tertiary h-1 w-1 rounded animate-pulse"></span>
-                  <div className="bg-gray-200 border border-gray-200 w-16 h-5 animate-pulse"></div>
-                </div>
-                <div className="bg-gray-200 border border-gray-200 w-16 h-5 animate-pulse"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
       <div className="flex justify-center items-center h-screen bg-gray-200">
         <div className="flex-none w-full md:w-2/3 flex flex-col justify-end items-end">
           <div dir="rtl" className="bill-feed overflow-y-auto p-4 h-[600px]">
+            {isLoadingFeed && (
+              <div className="w-2/3 md:w-full  bg-gray-200">
+                <div className="w-full bg-gray-200 ">
+                  <div className="p-4 bg-white border border-primary rounded-md">
+                    <div className="flex">
+                      <div className="mr-4 bg-gray-200 border border-gray-200 h-16 w-16 rounded animate-pulse"></div>
+                      <div className="space-y-1 flex flex-col w-full">
+                        <div className=" w-full flex items-center">
+                          <div className="bg-gray-200 border border-gray-200 w-60 h-5 animate-pulse"></div>
+                          <div className="ml-4 bg-ternary w-12 h-5 animate-pulse"></div>
+                        </div>
+                        <div className="bg-gray-200 border border-gray-200 w-36 h-5 animate-pulse"></div>
+                        <div className="bg-gray-200 border border-gray-200 w-full h-44 animate-pulse"></div>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <div className="bg-gray-200 border border-gray-200 w-16 h-5 animate-pulse"></div>
+                        <span className="bg-tertiary h-1 w-1 rounded animate-pulse"></span>
+                        <div className="bg-gray-200 border border-gray-200 w-16 h-5 animate-pulse"></div>
+                      </div>
+                      <div className="bg-gray-200 border border-gray-200 w-16 h-5 animate-pulse"></div>
+                    </div>
+                  </div>
+                </div>
+                <div className="w-full mx-auto bg-gray-200 mt-8 ">
+                  <div className="p-4 bg-white border border-primary rounded-md">
+                    <div className="flex">
+                      <div className="mr-4 bg-gray-200 border border-gray-200 h-16 w-16 rounded animate-pulse"></div>
+                      <div className="space-y-1 flex flex-col w-full">
+                        <div className=" w-full flex items-center">
+                          <div className="bg-gray-200 border border-gray-200 w-60 h-5 animate-pulse"></div>
+                          <div className="ml-4 bg-ternary w-12 h-5 animate-pulse"></div>
+                        </div>
+                        <div className="bg-gray-200 border border-gray-200 w-36 h-5 animate-pulse"></div>
+                        <div className="bg-gray-200 border border-gray-200 w-full h-44 animate-pulse"></div>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <div className="bg-gray-200 border border-gray-200 w-16 h-5 animate-pulse"></div>
+                        <span className="bg-tertiary h-1 w-1 rounded animate-pulse"></span>
+                        <div className="bg-gray-200 border border-gray-200 w-16 h-5 animate-pulse"></div>
+                      </div>
+                      <div className="bg-gray-200 border border-gray-200 w-16 h-5 animate-pulse"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {bills.map((bill) => (
               <div
                 key={bill.BillID}
@@ -403,9 +405,10 @@ function BillsFeed() {
             ))}
           </div>
         </div>
-        <div className="flex-none w-none md:w-1/3 h-4/5  bg-white rounded-lg shadow-md border border-gray-300 mt-4 md:mt-0">
+        <div className="flex-none w-none md:w-1/3 h-4/5 mr-2  bg-white rounded-lg shadow-md border border-gray-300 mt-4 md:mt-0">
           {/* Blue box with styles */}
           <div className="h-full  bg-gray-400 rounded-lg">
+            <div dir="rtl">{/* <h3>הצעות החוק החמות היום :</h3> */}</div>
             {/* Content within the blue box */}
             {/* You can add elements or components here */}
           </div>

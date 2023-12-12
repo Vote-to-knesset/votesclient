@@ -129,6 +129,7 @@ const LoginEntry = () => {
                         onSuccess={responseMessage}
                         onError={errorMessage}
                       />
+                      
                     </div>
 
                     <div className="border border-gray-300 p-4 mx-auto max-w-md text-center flex flex-col items-center">
