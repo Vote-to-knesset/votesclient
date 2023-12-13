@@ -26,18 +26,23 @@ const LoginEntry = () => {
           },
         }
       );
-      console.log(response);
-
       if (response.status === 200) {
-        console.log(response.data);
-        setUserDetails({
-          ...userDetails,
-          google: true,
-          userName: response.data.userName,
-          email: response.data.email,
-        });
+        if (response.data.token) {
+          const { token } = response.data;
 
-        navigateChoice("/choice");
+          localStorage.setItem("tokenVote", token);
+
+          navigateBills("/billsFeed");
+        } else {
+          setUserDetails({
+            ...userDetails,
+            google: true,
+            userName: response.data.userName,
+            email: response.data.email,
+          });
+
+          navigateChoice("/choice");
+        }
       } else {
         console.error("Failed to fetch google accounte");
       }
@@ -129,7 +134,6 @@ const LoginEntry = () => {
                         onSuccess={responseMessage}
                         onError={errorMessage}
                       />
-                      
                     </div>
 
                     <div className="border border-gray-300 p-4 mx-auto max-w-md text-center flex flex-col items-center">
