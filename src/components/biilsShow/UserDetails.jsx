@@ -20,11 +20,14 @@ const UserDetails = ({ show }) => {
     position: "fixed",
     top: 50,
     left: 20,
-    padding: "20px",
+    height: "46%",
+    width: "24%",
+    padding: "10px",
     backgroundColor: "white",
     borderRadius: "8px",
     zIndex: 1000,
     boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+    // justifyContent: "space-between",
   };
 
   const headerStyles = {
@@ -40,28 +43,30 @@ const UserDetails = ({ show }) => {
   }
 
   const classNameButtons =
-    "flex items-center text-black bg-gray-200 hover:bg-gray-400 rounded-md px-4 py-2 mr-4";
+    "flex items-center text-black bg-gray-200 hover:bg-gray-400 rounded-md px-4 py-2 mr-4 ";
   const stylesButtons = {
     display: "flex",
     alignItems: "center",
     marginBottom: "8px",
     fontSize: "18px",
+    width: "100%",
+    justifyContent: "space-between",
   };
 
   return (
     <div style={userDetailsStyles} className="text-black">
-      <div className="flex items-center text-lg mb-4 shadow-md px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-400 ">
+      <div className="flex items-center text-xl mb-7 shadow-md px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-400 justify-between ">
         {" "}
+        איזור אישי
         <svg
-          viewBox="0 0 24 24"
+          viewBox="0 0 20 20"
           fill="currentColor"
           height="1em"
           width="1em"
-          className="mr-2"
+          className="mr-0"
         >
           <path d="M11 9c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3m3 11H2v-2c0-2.21 2.69-4 6-4s6 1.79 6 4m8-6v2h-9v-2m9-4v2h-9V8m9-4v2h-9V4z" />
         </svg>
-        איזור אישי
       </div>
 
       <div style={{ display: "flex", flexDirection: "column" }}>

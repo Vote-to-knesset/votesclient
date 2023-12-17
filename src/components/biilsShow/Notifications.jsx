@@ -13,7 +13,7 @@ const Notifications = ({msg}) => {
   };
 
   return (
-    <div className="fixed top-12  z-50">
+    <div className="fixed  z-50" style={{top: "50px"}}>
       <div
         className="bg-white rounded-lg shadow-md p-4 cursor-pointer w-72 transition-all duration-300 ease-in-out hover:shadow-lg"
         onClick={handleNotificationClick}
