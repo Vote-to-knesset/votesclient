@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useLawsBills } from "../../../atoms/atomBills";
 import Chart from "chart.js/auto";
+import Header from "./Header";
 
 const VoteDetails = () => {
   const [voteDataArray] = useLawsBills();
   const [expandedIndex, setExpandedIndex] = useState(null);
+  const [chartInstances, setChartInstances] = useState([]);
 
   const handleToggle = (index) => {
     if (expandedIndex === index) {
@@ -15,6 +17,9 @@ const VoteDetails = () => {
   };
 
   useEffect(() => {
+    chartInstances.forEach((chart) => chart.destroy());
+    setChartInstances([]);
+
     voteDataArray.forEach((voteData, index) => {
       if (expandedIndex === index) {
         const partyVotes = {};
@@ -53,24 +58,23 @@ const VoteDetails = () => {
 
         const maxTotalVotes = totalVotesArray[totalVotesArray.length - 1];
 
-
         const datasetData = partyNames.map((party) => {
           return {
             label: party,
             data: [
-              partyVotes[party]["בעד"] / maxTotalVotes,
-              partyVotes[party]["נגד"] / maxTotalVotes,
+              partyVotes[party]["בעד"],
+              partyVotes[party]["נגד"],
             ],
             backgroundColor: ["rgba(0, 255, 0, 0.6)", "rgba(255, 0, 0, 0.6)"],
             hoverBackgroundColor: ["rgba(0, 255, 0, 1)", "rgba(255, 0, 0, 1)"],
             namesInFavor: partyVotes[party].namesInFavor,
             namesAgainst: partyVotes[party].namesAgainst,
-            totalVotes: partyVotes[party].totalVotes, // Storing total votes for tooltip
+            totalVotes: partyVotes[party].totalVotes,
           };
         });
 
         const ctx = document.getElementById(`factionChart-${index}`);
-        new Chart(ctx, {
+        const newChartInstance = new Chart(ctx, {
           type: "bar",
           data: {
             labels: partyNames,
@@ -102,16 +106,19 @@ const VoteDetails = () => {
             scales: {
               y: {
                 beginAtZero: true,
+                max: maxTotalVotes,
+                ticks: {
+                  stepSize: Math.ceil(1),
+                },
                 title: {
                   display: true,
-                  text: "Number of Voters",
+                  text: "",
                 },
-              
               },
               x: {
                 title: {
                   display: true,
-                  text: "Parties",
+                  text: "",
                 },
                 ticks: {
                   autoSkip: false,
@@ -135,12 +142,18 @@ const VoteDetails = () => {
             },
           },
         });
+
+        setChartInstances((prevInstances) => [
+          ...prevInstances,
+          newChartInstance,
+        ]);
       }
     });
   }, [voteDataArray, expandedIndex]);
 
   return (
     <>
+
       {voteDataArray.map((voteData, dataIndex) => (
         <div
           dir="rtl"
@@ -172,10 +185,10 @@ const VoteDetails = () => {
           {expandedIndex === dataIndex && (
             <div className="border-t border-gray-300 pt-4">
               <h3 className="text-lg font-bold mb-2">פרטי ההצבעה :</h3>
-              {/* Remaining details */}
               <p className="mt-4">סוג ההצבעה : {voteData.VoteType}</p>
               <p className="mt-2">
-                תאריך ההצעה : {new Date(voteData.VoteDate).toLocaleDateString()}
+                תאריך ההצעה :{" "}
+                {new Date(voteData.VoteDate).toLocaleDateString()}
               </p>
               <p className="mt-2"> סטטוס : {voteData.AcceptedText}</p>
               <canvas
