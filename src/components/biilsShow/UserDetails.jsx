@@ -31,6 +31,16 @@ const UserDetails = ({ show }) => {
     boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
     // justifyContent: "space-between",
   };
+  const mobileStyles = {
+    width: "90%",
+    left: "5%",
+    height: "80%",
+  };
+
+  const mergedStyles = {
+    ...userDetailsStyles,
+    ...(window.innerWidth <= 768 && mobileStyles),
+  };
 
   const headerStyles = {
     border: "0.2px solid black",
@@ -56,7 +66,7 @@ const UserDetails = ({ show }) => {
   };
 
   return (
-    <div style={userDetailsStyles} className="text-black">
+    <div style={mergedStyles} className="text-black ">
       <div onClick={hendelPrivteZone} className="flex items-center text-xl mb-7 shadow-md px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-400 justify-between ">
         {" "}
         איזור אישי
