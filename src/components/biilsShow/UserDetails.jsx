@@ -34,7 +34,7 @@ const UserDetails = ({ show }) => {
   const mobileStyles = {
     width: "90%",
     left: "5%",
-    height: "80%",
+    height: "60%",
   };
 
   const mergedStyles = {

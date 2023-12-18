@@ -236,7 +236,7 @@ function BillsFeed() {
 
       <div className="flex justify-center items-center h-screen bg-gray-200">
         <div className="flex-none w-full md:w-2/3 flex flex-col justify-end items-end">
-          <div dir="rtl" className="bill-feed overflow-y-auto p-4 h-[600px]">
+          <div dir="rtl" className="bill-feed overflow-y-auto p-4 h-[650px]">
             {isLoadingFeed && (
               <div className="w-2/3 md:w-full  bg-gray-200">
                 <div className="w-full bg-gray-200 ">
