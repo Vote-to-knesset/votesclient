@@ -235,14 +235,14 @@ function BillsFeed() {
       <Header />
 
       <div className="flex justify-center items-center h-screen bg-gray-200">
-        <div className="flex-none w-full md:w-2/3 flex flex-col justify-end items-end">
+        <div className="flex-none   w-full md:w-3/5 flex flex-col justify-end items-end ">
           <div dir="rtl" className="bill-feed overflow-y-auto p-4 h-[650px]">
             {isLoadingFeed && (
               <div className="w-2/3 md:w-full  bg-gray-200">
                 <div className="w-full bg-gray-200 ">
-                  <div className="p-4 bg-white border border-primary rounded-md">
+                  <div className="p-20 bg-white border border-primary rounded-md">
                     <div className="flex">
-                      <div className="mr-4 bg-gray-200 border border-gray-200 h-16 w-16 rounded animate-pulse"></div>
+                      <div className="mr-4 bg-gray-200 border border-gray-200 h-16 w-40 rounded animate-pulse"></div>
                       <div className="space-y-1 flex flex-col w-full">
                         <div className=" w-full flex items-center">
                           <div className="bg-gray-200 border border-gray-200 w-60 h-5 animate-pulse"></div>
@@ -293,12 +293,12 @@ function BillsFeed() {
             {bills.map((bill) => (
               <div
                 key={bill.BillID}
-                className=" bg-white rounded p-4 m-4 shadow-lg border border-gray-300"
+                className=" bg-white rounded-lg shadow-md p-6 pb-2 mb-8"
               >
                 <h3 className="text-xl font-semibold mb-2">
                   {bill.name || bill.Name}
                 </h3>
-                {bill.SummaryLaw && <p>{bill.SummaryLaw}</p>}
+                {bill.SummaryLaw && <p className="mb-2">{bill.SummaryLaw}</p>}
                 {bill.present && (
                   <div>
                     <h5 className="text-lg font-semibold mb-2">
@@ -361,7 +361,7 @@ function BillsFeed() {
                 {selecteBills.includes(bill.BillID) || Sbills.includes(bill) ? (
                   <GraphVotes voteData={calculateVoteData(bill)} />
                 ) : (
-                  <div>
+                  <div className="flex  items-center mt-4">
                     <button
                       onClick={() => handleVoteClickFor(bill, "in_favor")}
                       className="bg-green-400 hover:bg-green-600 text-white w-32 h-14 rounded-md m-2 transition duration-300 ease-in-out"
@@ -378,7 +378,7 @@ function BillsFeed() {
                 )}
                 <p>סך כל ההצבעות : {bill.in_favor + bill.against}</p>
 
-                <div className="flex justify-center border-t dark:border-gray-400 mt-6 ">
+                <div className="flex justify-center border-t border-gray-300 mt-6 ">
                   <button onClick={() => toggleComment(bill)}>
                     <svg
                       className="mt-2 hover:scale-110 "
@@ -405,7 +405,7 @@ function BillsFeed() {
             ))}
           </div>
         </div>
-        <div className="flex-none w-none md:w-1/3 h-4/5 mr-2  bg-white rounded-lg shadow-md border border-gray-300 mt-4 md:mt-0">
+        <div className="flex-none w-none md:w-1/3 h-4/5  bg-white rounded-lg shadow-md border border-gray-300 mt-4 md:mt-0">
           {/* Blue box with styles */}
           <div className="h-full  bg-gray-400 rounded-lg">
             <div dir="rtl">{/* <h3>הצעות החוק החמות היום :</h3> */}</div>

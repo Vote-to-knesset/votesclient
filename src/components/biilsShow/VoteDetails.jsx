@@ -3,6 +3,20 @@ import { useLawsBills } from "../../../atoms/atomBills";
 import Chart from "chart.js/auto";
 import Header from "./Header";
 
+const partyNamesShort = {
+  "סיעת הליכוד ": "הליכוד",
+  "סיעת יהדות התורה": "יהדות התורה",
+  'סיעת התאחדות הספרדים שומרי תורה תנועתו של מרן הרב עובדיה יוסף זצ"ל': "שס",
+  'סיעת רע"ם': "רעם",
+  "סיעת יש עתיד": "יש עתיד",
+  'סיעת חד"ש-תע"ל': "חדש תעל",
+  "סיעת נעם - בראשות אבי מעוז": "נעם",
+  "סיעת ישראל ביתנו": "ישראל ביתנו",
+  "סיעת המחנה הממלכתי ": "המחנה הממלכתי",
+  "סיעת הציונות הדתית בראשות בצלאל סמוטריץ'": "ציונות דתית",
+  "סיעת עוצמה יהודית בראשות איתמר בן גביר": "עוצמה יהודית",
+};
+
 const VoteDetails = () => {
   const [voteDataArray] = useLawsBills();
   const [expandedIndex, setExpandedIndex] = useState(null);
@@ -57,14 +71,12 @@ const VoteDetails = () => {
         totalVotesArray.sort((a, b) => a - b);
 
         const maxTotalVotes = totalVotesArray[totalVotesArray.length - 1];
+        
 
         const datasetData = partyNames.map((party) => {
           return {
-            label: party,
-            data: [
-              partyVotes[party]["בעד"],
-              partyVotes[party]["נגד"],
-            ],
+            label: partyNamesShort.party,
+            data: [partyVotes[party]["בעד"], partyVotes[party]["נגד"]],
             backgroundColor: ["rgba(0, 255, 0, 0.6)", "rgba(255, 0, 0, 0.6)"],
             hoverBackgroundColor: ["rgba(0, 255, 0, 1)", "rgba(255, 0, 0, 1)"],
             namesInFavor: partyVotes[party].namesInFavor,
@@ -153,51 +165,52 @@ const VoteDetails = () => {
 
   return (
     <>
-
       {voteDataArray.map((voteData, dataIndex) => (
-        <div
-          dir="rtl"
-          key={dataIndex}
-          className="bg-white shadow-md rounded my-4"
-        >
-          <div className="p-4" onClick={() => handleToggle(dataIndex)}>
-            <h2 className="text-xl font-bold mb-2">{voteData.ItemTitle}</h2>
-            <p className="text-sm mb-4">{voteData.Decision}</p>
-            <p>ההצבעה שלך :{voteData.userVote}</p>
+        <div className="overflow-scroll">
+          <div
+            dir="rtl"
+            key={dataIndex}
+            className="bg-white shadow-md rounded my-4 p-2"
+          >
+            <div className="p-4" onClick={() => handleToggle(dataIndex)}>
+              <h2 className="text-xl font-bold mb-2">{voteData.ItemTitle}</h2>
+              <p className="text-sm mb-4">{voteData.Decision}</p>
+              <p>ההצבעה שלך :{voteData.userVote}</p>
+
+              {expandedIndex === dataIndex && (
+                <div className="flex flex-wrap justify-between mb-4">
+                  {voteData.VoteCounters.map((counter, index) => (
+                    <div key={index} className="w-1/2 sm:w-auto mb-2">
+                      <span
+                        className="inline-block w-3 h-3 rounded-full mr-2"
+                        style={{ backgroundColor: counter.ColorName }}
+                      ></span>
+                      <span>
+                        {counter.Title}: {counter.countOfResult}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
 
             {expandedIndex === dataIndex && (
-              <div className="flex flex-wrap justify-between mb-4">
-                {voteData.VoteCounters.map((counter, index) => (
-                  <div key={index} className="w-1/2 sm:w-auto mb-2">
-                    <span
-                      className="inline-block w-3 h-3 rounded-full mr-2"
-                      style={{ backgroundColor: counter.ColorName }}
-                    ></span>
-                    <span>
-                      {counter.Title}: {counter.countOfResult}
-                    </span>
-                  </div>
-                ))}
+              <div className="border-t border-gray-300 pt-4">
+                <h3 className="text-lg font-bold mb-2">פרטי ההצבעה :</h3>
+                <p className="mt-4">סוג ההצבעה : {voteData.VoteType}</p>
+                <p className="mt-2">
+                  תאריך ההצעה :{" "}
+                  {new Date(voteData.VoteDate).toLocaleDateString()}
+                </p>
+                <p className="mt-2"> סטטוס : {voteData.AcceptedText}</p>
+                <canvas
+                  id={`factionChart-${dataIndex}`}
+                  width="400"
+                  height="200"
+                ></canvas>
               </div>
             )}
           </div>
-
-          {expandedIndex === dataIndex && (
-            <div className="border-t border-gray-300 pt-4">
-              <h3 className="text-lg font-bold mb-2">פרטי ההצבעה :</h3>
-              <p className="mt-4">סוג ההצבעה : {voteData.VoteType}</p>
-              <p className="mt-2">
-                תאריך ההצעה :{" "}
-                {new Date(voteData.VoteDate).toLocaleDateString()}
-              </p>
-              <p className="mt-2"> סטטוס : {voteData.AcceptedText}</p>
-              <canvas
-                id={`factionChart-${dataIndex}`}
-                width="400"
-                height="200"
-              ></canvas>
-            </div>
-          )}
         </div>
       ))}
     </>

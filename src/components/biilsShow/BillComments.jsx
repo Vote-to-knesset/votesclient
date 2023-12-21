@@ -211,7 +211,7 @@ function BillComment({ billId, billName, onClose }) {
 
   return (
     <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="w-5/6 h-5/6 md:w-3/4  bg-white rounded-lg shadow-lg relative">
+      <div className="w-5/6 h-full md:w-2/4 md:h-4/6  bg-white rounded-lg shadow-lg relative">
         <div className="flex items-center">
           <div
             className="bg-gray-200 rounded-full p-2 m-4 cursor-pointer"
@@ -241,8 +241,9 @@ function BillComment({ billId, billName, onClose }) {
                   </div>
                   <div className="  ">
                     <div className="flex flex-row text-xs text-black">
-                      <div className="rounded-full bg-blue p-1 hover:scale-150 ">
+                      <div className="rounded-full bg-blue p-1 hover:scale-150 hover:cursor-pointer ">
                         <svg
+                        
                           onClick={() =>
                             addLike(
                               billId,
@@ -250,6 +251,7 @@ function BillComment({ billId, billName, onClose }) {
                               comment.text
                             )
                           }
+                          
                           viewBox="0 0 1024 1024"
                           fill="currentColor"
                           height="1.5em"
@@ -277,7 +279,7 @@ function BillComment({ billId, billName, onClose }) {
                 rows="2"
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
-                className="flex-grow p-2 mb-2 bg-gray-200 rounded-2xl border border-gray-300  text-black focus:outline-none mr-2 ml-2"
+                className="flex-grow p-2 pb-0 bg-gray-200 rounded-2xl border border-gray-300  text-black mr-2 ml-2"
                 placeholder="כתוב תגובה ..."
                 required
               ></textarea>
@@ -287,7 +289,7 @@ function BillComment({ billId, billName, onClose }) {
                   fill="currentColor"
                   height="3em"
                   width="3em"
-                  color="gray"
+                  color="white"
                 >
                   <path
                     transform="scale(-1, 1) translate(-24, 0)"
