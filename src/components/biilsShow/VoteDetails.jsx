@@ -21,6 +21,7 @@ const VoteDetails = () => {
   const [voteDataArray] = useLawsBills();
   const [expandedIndex, setExpandedIndex] = useState(null);
   const [chartInstances, setChartInstances] = useState([]);
+  
 
   const handleToggle = (index) => {
     if (expandedIndex === index) {
@@ -71,11 +72,29 @@ const VoteDetails = () => {
         totalVotesArray.sort((a, b) => a - b);
 
         const maxTotalVotes = totalVotesArray[totalVotesArray.length - 1];
+
+        const newPartyNames = []
+
+
+        partyNames.forEach((party)=>{
+          const key = Object.keys(partyNamesShort).find(
+            (key) => key === party
+          );
+        
+          if (key) {
+            newPartyNames.push(partyNamesShort[key])
+          }
+          else{
+            newPartyNames.push(key)
+          }
+        })
         
 
         const datasetData = partyNames.map((party) => {
+          const shortPartyName = partyNamesShort[party] || party;
+
           return {
-            label: partyNamesShort.party,
+            label: shortPartyName,
             data: [partyVotes[party]["בעד"], partyVotes[party]["נגד"]],
             backgroundColor: ["rgba(0, 255, 0, 0.6)", "rgba(255, 0, 0, 0.6)"],
             hoverBackgroundColor: ["rgba(0, 255, 0, 1)", "rgba(255, 0, 0, 1)"],
@@ -89,7 +108,7 @@ const VoteDetails = () => {
         const newChartInstance = new Chart(ctx, {
           type: "bar",
           data: {
-            labels: partyNames,
+            labels: newPartyNames,
             datasets: [
               {
                 data: datasetData.map((data) => data.data[0]),
@@ -134,8 +153,8 @@ const VoteDetails = () => {
                 },
                 ticks: {
                   autoSkip: false,
-                  maxRotation: 90,
-                  minRotation: 90,
+                  // maxRotation: 90,
+                  // minRotation: 90,
                 },
               },
             },
