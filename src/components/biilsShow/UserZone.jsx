@@ -1,10 +1,12 @@
 import React from 'react';
 import VoteDetails from './VoteDetails';
 import Header from './Header';
+import Maching from './Maching';
 const UserZone = () => {
   return (
     <div className="bg-gray-100 min-h-screen">
       <Header />
+      <Maching/>
 
 
       
