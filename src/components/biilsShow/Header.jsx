@@ -39,7 +39,7 @@ function Header() {
   const [notifications, setNotifications] = useState(false);
   const [serverMessage, setServerMessage] = useState("");
   const[voteData,setVoteData] = useLawsBills()
-
+  console.log(voteData);
   const navigatBills = useNavigate();
 
 

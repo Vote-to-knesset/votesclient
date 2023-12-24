@@ -33,18 +33,15 @@ const partyN = [
 ];
 
 export default function BillStatistic() {
-    const location = useLocation();
-    const { search } = location;
-    const queryParams = qs.parse(search);
-    const billId = queryParams.billId;
-
-
+  const location = useLocation();
+  const { search } = location;
+  const queryParams = qs.parse(search);
+  const billId = queryParams.billId;
 
   const [statistic, setStatistic] = useStatistic();
   const [partyVotes, setPartyVotes] = useState([]);
 
   useEffect(() => {
-
     setStatistic({ BillID: billId });
     async function fetchData() {
       try {
@@ -61,67 +58,67 @@ export default function BillStatistic() {
     fetchData();
   }, [billId]);
 
-  // Generate pie chart data for each party
-  const pieCharts = partyNames.map((partyName, index) => {
-    const forVotes = (partyVotes[0] && partyVotes[0][`${partyName}_For`]) || 0;
-    const againstVotes =
-      (partyVotes[0] && partyVotes[0][`${partyName}_Against`]) || 0;
+  // Generate pie chart data for each party with votes
+  const pieCharts = partyNames
+    .map((partyName, index) => {
+      const forVotes = (partyVotes[0] && partyVotes[0][`${partyName}_For`]) || 0;
+      const againstVotes =
+        (partyVotes[0] && partyVotes[0][`${partyName}_Against`]) || 0;
 
-    const data = [
-      {
-        id: "בעד ",
-        label: "In-favor",
-        value: forVotes,
-      },
-      {
-        id: "נגד",
-        label: "Againts",
-        value: againstVotes,
-     },
-    ];
+      // Check if the party has any votes, and only render if it does
+      if (forVotes > 0 || againstVotes > 0) {
+        const data = [
+          {
+            id: "בעד ",
+            label: "In-favor",
+            value: forVotes,
+          },
+          {
+            id: "נגד",
+            label: "Againts",
+            value: againstVotes,
+          },
+        ];
 
-    return (
-      <div>
-     
-      <div
-        key={index}
-        className="chart-container"
-        style={{ height: "350px", width: "350px", marginBottom: "20px", textAlign: "center"}}
-      >
-        <div className="chart-title" style={{ fontSize: "18px", marginBottom: "10px" ,marginTop: "40px"}}>{partyN[index]}</div>
-        <ResponsivePie
-          data={data}
-          margin={{ top: 10, right: 40, bottom: 40, left: 40 }}
-          innerRadius={0.5}
-          padAngle={0.7}
-          cornerRadius={3}
-          arcLabelsTextColor={"white"}
-          activeOuterRadiusOffset={8}
-          colors={["rgb(102, 187, 106)", "rgb(239, 83, 80)"]}
-          borderWidth={2}
-          borderColor={{
-            from: "color",
-            modifiers: [["darker", 0.2]],
-          }}
-          enableArcLinkLabels={false}
-        />
-      </div>
-      </div>
-    );
-  });
+        return (
+          <div key={index} className="chart-container" style={{ height: "350px", width: "350px", marginBottom: "20px", textAlign: "center" }}>
+            <div className="chart-title" style={{ fontSize: "18px", marginBottom: "10px", marginTop: "40px" }}>{partyN[index]}</div>
+            <ResponsivePie
+              data={data}
+              margin={{ top: 10, right: 40, bottom: 40, left: 40 }}
+              innerRadius={0.5}
+              padAngle={0.7}
+              cornerRadius={3}
+              arcLabelsTextColor={"white"}
+              activeOuterRadiusOffset={8}
+              colors={["rgb(102, 187, 106)", "rgb(239, 83, 80)"]}
+              borderWidth={2}
+              borderColor={{
+                from: "color",
+                modifiers: [["darker", 0.2]],
+              }}
+              enableArcLinkLabels={false}
+            />
+          </div>
+        );
+      }
+      return null; // Return null for parties with no votes
+    })
+    .filter((chart) => chart !== null); // Filter out null charts
 
   return (
-    <div> <Header/>
-    <div
-      className="chart-wrapper bg-gray-100"
-      style={{
-        display: "flex",
-        flexWrap: "wrap",
-        justifyContent: "space-around",
-      }}
-    >
-      {pieCharts}
-    </div>
+    <div>
+      <Header />
+      <div
+        className="chart-wrapper bg-gray-100"
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "space-around",
+        }}
+      >
+        {pieCharts}
+      </div>
     </div>
   );
 }

@@ -5,7 +5,6 @@ import Chart from "chart.js/auto";
 const VoteDetails = () => {
   const [voteDataArray] = useLawsBills();
   const [expandedIndex, setExpandedIndex] = useState(null);
-
   const handleToggle = (index) => {
     if (expandedIndex === index) {
       setExpandedIndex(null);
@@ -51,16 +50,14 @@ const VoteDetails = () => {
         );
         totalVotesArray.sort((a, b) => a - b);
 
-        const maxTotalVotes = totalVotesArray[totalVotesArray.length - 1];
-
+        const maxTotalVotes = Math.max(
+          ...Object.values(partyVotes).map((party) => party.totalVotes)
+        );
 
         const datasetData = partyNames.map((party) => {
           return {
             label: party,
-            data: [
-              partyVotes[party]["בעד"] / maxTotalVotes,
-              partyVotes[party]["נגד"] / maxTotalVotes,
-            ],
+            data: [partyVotes[party]["בעד"], partyVotes[party]["נגד"]],
             backgroundColor: ["rgba(0, 255, 0, 0.6)", "rgba(255, 0, 0, 0.6)"],
             hoverBackgroundColor: ["rgba(0, 255, 0, 1)", "rgba(255, 0, 0, 1)"],
             namesInFavor: partyVotes[party].namesInFavor,
@@ -68,6 +65,7 @@ const VoteDetails = () => {
             totalVotes: partyVotes[party].totalVotes, // Storing total votes for tooltip
           };
         });
+        partyVotes;
 
         const ctx = document.getElementById(`factionChart-${index}`);
         new Chart(ctx, {
@@ -102,11 +100,15 @@ const VoteDetails = () => {
             scales: {
               y: {
                 beginAtZero: true,
+                max: maxTotalVotes, // Set the maximum value of the y-axis
+                // Adjust the step size as needed
+                ticks: {
+                  stepSize: Math.ceil(maxTotalVotes / maxTotalVotes), // Adjust the step size as needed
+                },
                 title: {
                   display: true,
                   text: "Number of Voters",
                 },
-              
               },
               x: {
                 title: {
