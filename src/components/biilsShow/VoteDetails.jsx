@@ -183,7 +183,8 @@ const VoteDetails = () => {
   }, [voteDataArray, expandedIndex]);
 
   return (
-    <>
+    < >
+    <h2 dir="rtl">חוקים שהצבעת עליהם :</h2>
       {voteDataArray.map((voteData, dataIndex) => (
         <div className="overflow-scroll">
           <div

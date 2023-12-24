@@ -2,22 +2,21 @@ import React from 'react';
 import VoteDetails from './VoteDetails';
 import Header from './Header';
 import Maching from './Maching';
+
 const UserZone = () => {
   return (
-    <div className="bg-gray-100 min-h-screen">
+    <div className="bg-gray-100 min-h-screen flex flex-col">
       <Header />
-      <Maching/>
-
-
-      
-      <div className="w-3/5 p-2 ml-2">
-      
+      <div className="flex flex-col rg:flex-row">
+      <div dir='rtl' className="w-full rg:w-2/6 p-2">
+          <Maching />
+        </div>
+        <div className="w-full lg:w-3/6 p-2">
           <VoteDetails />
-
-          </div>
-       
-
-      <footer className="bg-gray-200 text-center p-4 mt-8">
+        </div>
+        
+      </div>
+      <footer className="bg-gray-200 text-center p-4">
         &copy; 2023. All rights reserved.
       </footer>
     </div>
