@@ -1,7 +1,6 @@
 import React from 'react';
 import VoteDetails from './VoteDetails';
 import Header from './Header';
-import Matching from './Matching';
 const UserZone = () => {
   return (
     <div className="bg-gray-100 min-h-screen">
