@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLawsBills } from "../../../atoms/atomBills";
 import Chart from "chart.js/auto";
-
+import Maching from "./Maching";
 const VoteDetails = () => {
   const [voteDataArray] = useLawsBills();
   const [expandedIndex, setExpandedIndex] = useState(null);
@@ -143,6 +143,7 @@ const VoteDetails = () => {
 
   return (
     <>
+    <Maching/>
       {voteDataArray.map((voteData, dataIndex) => (
         <div
           dir="rtl"
