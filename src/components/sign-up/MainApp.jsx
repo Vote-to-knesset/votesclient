@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 const MainApp = () => {
   const [userDetails, setUserDetails] = useUserDetails();
   const [currentStep, setCurrentStep] = useState(1);
+  console.log(userDetails);
 
   const navigatLogin = useNavigate()
 
@@ -75,10 +76,29 @@ const MainApp = () => {
 
   const updateUserDetailsAndSubmit = async (choice, step) => {
     try {
+      if (userDetails.google){
+        console.log(choice);
+        // setUserDetails({ ...userDetails,  gender: choice })
+        const response = await axios.post(
+          "https://sever-users-node-js.vercel.app/users/signupWithGoogle",
+          { ...userDetails, gender: choice }
+
+        );
+        console.log(userDetails);
+          if (response.status === 200){
+            const { token } = response.data;
+
+            localStorage.setItem('tokenVote', token);
+            navigatLogin('/billsFeed')
+          }
+      }
+      else{
       const response = await axios.post(
         "https://sever-users-node-js.vercel.app/users/signupUser",
         { ...userDetails, gender: choice }
       );
+      }
+      console.log(response);
     } catch (error) {
       console.log(error);
     }
@@ -116,7 +136,7 @@ const MainApp = () => {
         {steps[currentStep - 1].choices.map((choice, index) => (
           <button
             key={index}
-            className="w-full sm:px-20 py-4 sm:py-10 bg-blue-500 text-white rounded cursor-pointer"
+            className="w-full sm:px-20 py-4 sm:py-10 bg-blue-500 hover:bg-blue-700 text-white rounded cursor-pointer"
             onClick={() =>
               handleChoice(choice, steps[currentStep - 1].component)
             }

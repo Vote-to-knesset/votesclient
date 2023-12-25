@@ -48,12 +48,13 @@ async function getBillsComments(billId) {
   }
 }
 
-function BillComment({ billId, onClose }) {
+function BillComment({ billId, billName, onClose }) {
   const [comment, setComment] = useState("");
   const [discussionTitle, setDiscussionTitle] = useState("");
   const [discussions, setDiscussions] = useState([]);
   const [selectedDiscussion, setSelectedDiscussion] = useState(null);
   const [comments, setComments] = useState([]);
+  const [likedComments, setLikedComments] = useState([]);
 
   useLayoutEffect(() => {
     const fetchDiscussions = async () => {
@@ -70,27 +71,46 @@ function BillComment({ billId, onClose }) {
   }, []);
 
   const addLike = async (billId, discussionTitle, comment) => {
-    try {
-      const token = localStorage.getItem("tokenVote");
-      const response = await axios.post(
-        "https://sever-users-node-js.vercel.app/votes/adddiscussion",
-        { billId, discussionTitle, comment },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
+    let commentText = comment;
+    console.log(billId, discussionTitle, commentText);
+    if (!hasLikedComment(commentText)) {
+      try {
+        const token = localStorage.getItem("tokenVote");
+        const response = await axios.post(
+          "https://sever-users-node-js.vercel.app/votes/addlike",
+          { billId, discussionTitle, commentText },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response.status === 200) {
+          setLikedComments([...likedComments, commentText]);
+          updateLikesCount(commentText);
+          console.log(" successfully");
+        } else {
+          console.error("Failed to update like");
         }
-      );
-
-      if (response.status === 200) {
-        console.log(" successfully");
-      } else {
-        console.error("Failed to update like");
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.error(error);
     }
+  };
+
+  const updateLikesCount = (commentText) => {
+    const updatedComments = comments.map((comment) => {
+      if (comment.text === commentText) {
+        return { ...comment, like: comment.like + 1 };
+      }
+      return comment;
+    });
+    setComments(updatedComments);
+  };
+
+  const hasLikedComment = (commentText) => {
+    return likedComments.includes(commentText);
   };
 
   const addDiscussion = async (billId, discussionTitle) => {
@@ -153,6 +173,8 @@ function BillComment({ billId, onClose }) {
         id: selectedDiscussion.comments.length + 1,
         text: comment,
         timestamp: new Date().toISOString(),
+        like:0,
+        
       };
 
       const updatedComments = [...comments, newComment];
@@ -189,125 +211,91 @@ function BillComment({ billId, onClose }) {
 
   return (
     <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="w-3/4 h-3/4 bg-white rounded-lg shadow-lg  relative">
-        <div className="flex justify-end">
+      <div className="w-5/6 h-full md:w-2/4 md:h-4/6  bg-white rounded-lg shadow-lg relative">
+        <div className="flex items-center">
           <div
             className="bg-gray-200 rounded-full p-2 m-4 cursor-pointer"
             onClick={handleClose}
           >
             <AiTwotoneCloseCircle size={24} className="text-gray-600" />
           </div>
+          <h2 className="md:mt-6 ml-2 md:ml-4 overflow-hidden whitespace-nowrap">
+            {billName}
+          </h2>
         </div>
         {selectedDiscussion && comments ? (
           <div>
             <h2 className="text-gray-700 text-lg mb-2 mr-4">
               {selectedDiscussion.title}
             </h2>
-            <div className=" h-48 max-h-** overflow-y-scroll p-4">
+            <div className=" h-80  overflow-y-scroll p-4">
               {comments.map((comment) => (
                 <div
                   key={comment.text}
-                  className="bg-white text-black p-4 antialiased"
-                  style={{ borderBottom: "1px solid #ccc" }}
+                  className=" text-black p-4 antialiased border-b border-gray-300"
                 >
-                  <div className="bg-gray-300 rounded-full px-2 pt-2 pb-2.5">
-                    <div className="text-normal leading-snug md:leading-normal">
-                      {comment.text}
+                  <div className="flex justify-between items-center">
+                    <div className="bg-gray-200 rounded-2xl p-2">
+                      <span className="text-sm">{comment.text}</span>
                     </div>
                   </div>
-                  <div className="text-sm ml-4 mr-60 mt-0.5 text-black ">
-                    {calculateTimeElapsed(comment.timestamp)}{" "}
-                  </div>
-                  <div
-                    onClick={() =>
-                      addLike(billId, discussionTitle, comment.text)
-                    }
-                    className="bg-white  border border-white dark:border-gray-200 rounded-full float-right -mt-8 mr-0.5 flex shadow items-center"
-                  >
-                    <svg
-                      class="p-0.5 h-5 w-5 rounded-full z-20 bg-white dark:bg-blue-700"
-                      xmlns="http://www.w3.org/2000/svg"
-                      xmlns:xlink="http://www.w3.org/1999/xlink"
-                      viewBox="0 0 16 16"
-                    >
-                      <defs>
-                        <linearGradient
-                          id="a1"
-                          x1="50%"
-                          x2="50%"
-                          y1="0%"
-                          y2="100%"
+                  <div className="  ">
+                    <div className="flex flex-row text-xs text-black">
+                      <div className="rounded-full bg-blue p-1 hover:scale-150 hover:cursor-pointer ">
+                        <svg
+                        
+                          onClick={() =>
+                            addLike(
+                              billId,
+                              selectedDiscussion.title,
+                              comment.text
+                            )
+                          }
+                          
+                          viewBox="0 0 1024 1024"
+                          fill="currentColor"
+                          height="1.5em"
+                          width="1.5em"
+                          color={hasLikedComment(comment.text) ? "blue" : "gray"}
+                          className="..."
+                          disabled={hasLikedComment(comment.text)}
                         >
-                          <stop offset="0%" stop-color="#18AFFF" />
-                          <stop offset="100%" stop-color="#0062DF" />
-                        </linearGradient>
-                        <filter
-                          id="c1"
-                          width="118.8%"
-                          height="118.8%"
-                          x="-9.4%"
-                          y="-9.4%"
-                          filterUnits="objectBoundingBox"
-                        >
-                          <feGaussianBlur
-                            in="SourceAlpha"
-                            result="shadowBlurInner1"
-                            stdDeviation="1"
-                          />
-                          <feOffset
-                            dy="-1"
-                            in="shadowBlurInner1"
-                            result="shadowOffsetInner1"
-                          />
-                          <feComposite
-                            in="shadowOffsetInner1"
-                            in2="SourceAlpha"
-                            k2="-1"
-                            k3="1"
-                            operator="arithmetic"
-                            result="shadowInnerInner1"
-                          />
-                          <feColorMatrix
-                            in="shadowInnerInner1"
-                            values="0 0 0 0 0 0 0 0 0 0.299356041 0 0 0 0 0.681187726 0 0 0 0.3495684 0"
-                          />
-                        </filter>
-                        <path
-                          id="b1"
-                          d="M8 0a8 8 0 00-8 8 8 8 0 1016 0 8 8 0 00-8-8z"
-                        />
-                      </defs>
-                      <g fill="none">
-                        <use fill="url(#a1)" xlink:href="#b1" />
-                        <use fill="black" filter="url(#c1)" xlink:href="#b1" />
-                        <path
-                          fill="white"
-                          d="M12.162 7.338c.176.123.338.245.338.674 0 .43-.229.604-.474.725a.73.73 0 01.089.546c-.077.344-.392.611-.672.69.121.194.159.385.015.62-.185.295-.346.407-1.058.407H7.5c-.988 0-1.5-.546-1.5-1V7.665c0-1.23 1.467-2.275 1.467-3.13L7.361 3.47c-.005-.065.008-.224.058-.27.08-.079.301-.2.635-.2.218 0 .363.041.534.123.581.277.732.978.732 1.542 0 .271-.414 1.083-.47 1.364 0 0 .867-.192 1.879-.199 1.061-.006 1.749.19 1.749.842 0 .261-.219.523-.316.666zM3.6 7h.8a.6.6 0 01.6.6v3.8a.6.6 0 01-.6.6h-.8a.6.6 0 01-.6-.6V7.6a.6.6 0 01.6-.6z"
-                        />
-                      </g>
-                    </svg>
-                    <span className="text-sm ml-1 pr-1.5 text-gray-500 dark:text-gray-300">
-                      {comment.like}
-                    </span>
+                          <path d="M885.9 533.7c16.8-22.2 26.1-49.4 26.1-77.7 0-44.9-25.1-87.4-65.5-111.1a67.67 67.67 0 00-34.3-9.3H572.4l6-122.9c1.4-29.7-9.1-57.9-29.5-79.4A106.62 106.62 0 00471 99.9c-52 0-98 35-111.8 85.1l-85.9 311h-.3v428h472.3c9.2 0 18.2-1.8 26.5-5.4 47.6-20.3 78.3-66.8 78.3-118.4 0-12.6-1.8-25-5.4-37 16.8-22.2 26.1-49.4 26.1-77.7 0-12.6-1.8-25-5.4-37 16.8-22.2 26.1-49.4 26.1-77.7-.2-12.6-2-25.1-5.6-37.1zM112 528v364c0 17.7 14.3 32 32 32h65V496h-65c-17.7 0-32 14.3-32 32z" />
+                        </svg>
+                      </div>
+                      <span className="text-sm ml-6 text-gray-500 ">
+                        {comment.like}
+                      </span>
+                      {calculateTimeElapsed(comment.timestamp)}{" "}
+                    </div>
                   </div>
+                  <div className="bg-white  border border-white dark:border-gray-200 rounded-full float-right -mt-8 mr-0.5 flex shadow items-center"></div>
                 </div>
               ))}
             </div>
-            <div className="absolute bottom-0 left-0 w-full p-4 bg-gray-100 border-t border-gray-300">
+
+            <div className=" flex flex-row items-center ">
               <textarea
                 rows="2"
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
-                className="w-full p-2 mb-2 border border-gray-300 rounded text-black focus:outline-none"
+                className="flex-grow p-2 pb-0 bg-gray-200 rounded-2xl border border-gray-300  text-black mr-2 ml-2"
                 placeholder="כתוב תגובה ..."
                 required
               ></textarea>
-              <button
-                onClick={handleAddComment}
-                type="submit"
-                className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600 focus:outline-none"
-              >
-                הוסף תגובה
+              <button onClick={handleAddComment} type="submit">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  height="3em"
+                  width="3em"
+                  color="white"
+                >
+                  <path
+                    transform="scale(-1, 1) translate(-24, 0)"
+                    d="M8 7.71L18 12 8 16.29v-3.34l7.14-.95L8 11.05V7.71M12 2a10 10 0 0110 10 10 10 0 01-10 10A10 10 0 012 12 10 10 0 0112 2m0 2a8 8 0 00-8 8 8 8 0 008 8 8 8 0 008-8 8 8 0 00-8-8z"
+                  />
+                </svg>
               </button>
             </div>
           </div>

@@ -13,4 +13,9 @@ export const useSearchTerm = () => useAtom(searchTerm)
 const selecteBills = atom([])
 const useSelectedBills = () => useAtom(selecteBills)
 
-export { useBills, useSelectedBills, useStatistic};
+
+const votedLaws = atom([])
+const useLawsBills = ()=> useAtom(votedLaws)
+
+
+export { useBills, useSelectedBills, useStatistic, useLawsBills};

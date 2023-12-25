@@ -12,7 +12,8 @@ import LoginEntry from "./components/connctWebPages/LoginEntry.jsx";
 import BillsFeed from "./components/biilsShow/BillsFeed.jsx";
 import MainApp from "./components/sign-up/MainApp.jsx";
 import BillStatistic from "./components/biilsShow/BillStatistic.jsx";
-
+import VoteDetails from "./components/biilsShow/VoteDetails.jsx";
+import UserZone from "./components/biilsShow/UserZone.jsx";
 function App() {
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -23,6 +24,8 @@ function App() {
         <Route path="login" element={<LoginEntry />} />
         <Route path="billsFeed">
           <Route index element={<BillsFeed />} />
+          <Route path="votedata" element={<UserZone />} />
+
           {/* Nested route for StatisticPage */}
           <Route path="statistic" element={<BillStatistic />} />
         </Route>
