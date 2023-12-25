@@ -66,7 +66,7 @@ export default function BillStatistic() {
     const forVotes = (partyVotes[0] && partyVotes[0][`${partyName}_For`]) || 0;
     const againstVotes =
       (partyVotes[0] && partyVotes[0][`${partyName}_Against`]) || 0;
-
+if(forVotes > 0 || againstVotes >0){
     const data = [
       {
         id: "בעד ",
@@ -107,7 +107,7 @@ export default function BillStatistic() {
         />
       </div>
       </div>
-    );
+    )};
   });
 
   return (
