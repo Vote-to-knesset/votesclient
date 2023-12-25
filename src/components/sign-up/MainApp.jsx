@@ -78,10 +78,11 @@ const MainApp = () => {
     try {
       if (userDetails.google){
         console.log(choice);
-        setUserDetails({ ...userDetails,  gender: choice })
+        // setUserDetails({ ...userDetails,  gender: choice })
         const response = await axios.post(
           "https://sever-users-node-js.vercel.app/users/signupWithGoogle",
-          userDetails
+          { ...userDetails, gender: choice }
+
         );
         console.log(userDetails);
           if (response.status === 200){

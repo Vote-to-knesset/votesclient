@@ -91,29 +91,29 @@ const Maching = () => {
 
 
     const getBarColor = (percentage) => {
-        if (percentage >= maxMatchPercentage / 2) {
-          return `linear-gradient(to right, #00cc00, #33cc33)`;
+        if (percentage >= 50 ) {
+          return `linear-gradient(to left, #00cc00, #33cc33)`;
         } else {
-          return `linear-gradient(to right, #ff3333, #ff6666)`;
+          return `linear-gradient(to left, #ff3333, #ff6666)`;
         }
       };
     
       return (
         <>
-          <div className="fixed bg-white shadow-md rounded my-4 p-2">
-            <div className="max-w-4xl mx-auto p-4 text-center">
-              <h2 className="text-2xl mb-4">אחוז ההתאמה שלך למפלגות:</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div dir="rtl" className=" md:fixed bg-white shadow-md rounded mb-2 my-4 p-2 ">
+            <div className="max-w-4xl mx-auto p-2 text-center ">
+              <h2 className="text-2xl mb-2">אחוז ההתאמה שלך למפלגות:</h2>
+              <div className="grid grid-cols-1  gap-4">
                 {sortedParties.map((party) => (
                   <div
                     key={party}
-                    className="bg-white shadow-md rounded-md p-4 flex items-center"
+                    className="bg-white shadow-md rounded-md  flex items-center"
                   >
-                    <div className="w-full">
-                      <div className="text-lg font-bold mb-2">{party}</div>
-                      <div className="relative w-full bg-gray-200 h-8 rounded-full">
+                    <div className="w-full flex flex-row h-8">
+                      <div className="text-xs font-bold w-20 ">{party}</div>
+                      <div className="relative w-full bg-gray-200 h-4 rounded-full">
                         <div
-                          className="absolute top-0 left-0 h-full rounded-full"
+                          className="absolute top-0 right-0 h-full rounded-full"
                           style={{
                             width: `${matchPercentages[party].toFixed(2)}%`,
                             background: getBarColor(matchPercentages[party]),
