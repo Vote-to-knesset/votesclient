@@ -9,7 +9,7 @@ const UserZone = () => {
     <div className="bg-gray-100 min-h-screen flex flex-col">
       <Header />
       <div className="flex flex-col md:flex-row md:justify-center overflow-y-auto">
-        <div className="w-full md:w-2/5 lg:w-1/4 px-4 py-0 mr-4" >
+        <div className="w-full mt-10 md:w-2/5 lg:w-1/4 px-4 py-0 mr-4" >
           <Maching />
         </div>
         <div className="w-full lg:w-2/4 px-8 py-2 md:py-6">
