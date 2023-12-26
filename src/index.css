@@ -58,7 +58,10 @@
   visibility: visible;
   transform: translateX(10px);
 }
+html{
+  overflow-x:hidden ;
 
+}
 .choices {
   display: flex;
   justify-content: center;

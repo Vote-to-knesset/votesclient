@@ -1,6 +1,7 @@
 import { useSearchTerm, useBills } from "../../../atoms/atomBills";
 import { useState } from 'react'; // Import useState hook
 
+
 function Search() {
   const [searchTerm, setSearchTerm] = useSearchTerm();
   const [clickedSearchTerm, setClickedSearchTerm] = useState('');
@@ -18,7 +19,7 @@ function Search() {
   }
 
   function handleClickSearch() {
-    setSearchTerm(inputSearchTerm); // Perform search using the input search term
+    setSearchTerm(inputSearchTerm); 
     setClickedSearchTerm(inputSearchTerm);
   }
 
