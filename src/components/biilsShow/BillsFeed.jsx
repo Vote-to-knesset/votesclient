@@ -8,7 +8,7 @@ import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useStatistic } from "../../../atoms/atomBills.js";
 import qs from "query-string";
-
+import InterestingBills from "./InterestingBills.jsx";
 function calculateVoteData(bill) {
   const inFavor = bill.in_favor;
   const against = bill.against;
@@ -71,6 +71,7 @@ function BillsFeed() {
   const [isLoadingFeed, setIsLoadingFeed] = useState(false);
 
   const [isMounted, setIsMounted] = useState(false);
+  console.log(bills);
 
   useLayoutEffect(() => {
     if (!isMounted) {
@@ -114,14 +115,15 @@ function BillsFeed() {
   useEffect(() => {
     async function fetchData() {
       if (searchTerm) {
+        console.log(searchTerm);
         try {
           const data = { name: searchTerm };
-          console.log(data);
           const response = await axios.post(
             "https://kns-data-votes.onrender.com/api/search",
             data
           );
           const billsSearch = response.data;
+          console.log(response);
           setBills(billsSearch);
           setSearchTerm("");
         } catch (error) {
@@ -405,13 +407,12 @@ function BillsFeed() {
             ))}
           </div>
         </div>
-        <div className="flex-none w-none md:w-1/3 h-4/5  bg-white rounded-lg shadow-md border border-gray-300 mt-4 md:mt-0">
+        <div className="flex w-full  md:w-1/3 overflow-y-auto  bg-white rounded-lg shadow-md border border-gray-300 mt-4 md:mt-0">
           {/* Blue box with styles */}
-          <div className="h-full  bg-gray-400 rounded-lg">
-            <div dir="rtl">{/* <h3>הצעות החוק החמות היום :</h3> */}</div>
-            {/* Content within the blue box */}
-            {/* You can add elements or components here */}
-          </div>
+ 
+            <InterestingBills setBills={setBills} bills={bills}/>
+
+
         </div>
       </div>
     </div>
