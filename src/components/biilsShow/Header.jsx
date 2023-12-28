@@ -153,7 +153,7 @@ function Header() {
   
         >
           <div className="absolute top-12 left-1/2 transform -translate-x-1/2 ">
-            <div className=" flex flex-row items-start ">
+            <div className=" flex flex-row items-start  ">
               <Search />
               <button
                 onClick={toggleSearchBar}
