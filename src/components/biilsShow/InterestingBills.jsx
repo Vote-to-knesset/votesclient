@@ -53,7 +53,7 @@ const InterestingBills = ({ setBills, bills }) => {
   };
 
   return (
-    <div dir="rtl" className="container mx-auto mt-8">
+    <div dir="rtl" className="w-full  container mx-auto mt-8">
       <h1
         onClick={toggleInterests}
         className={`text-2xl font-bold mb-4 p-2 cursor-pointer `}

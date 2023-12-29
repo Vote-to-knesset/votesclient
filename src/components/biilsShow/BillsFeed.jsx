@@ -238,11 +238,11 @@ function BillsFeed() {
     <div>
       <Header />
 
-      <div className="flex flex-col md:flex-row justify-center items-center h-full bg-gray-200">
-        <div className=" w-full md:w-3/5 flex flex-col justify-center items-start ">
-          <div dir="rtl" className="bill-feed md:mr-2  overflow-y-auto p-4 h-[650px]">
+      <div className="flex flex-col  md:flex-row justify-center items-center h-full  bg-gray-200">
+        <div className="w-full md:w-3/5 flex flex-col justify-center items-start ">
+          <div dir="rtl" className="bill-feed md:mr-2 mt-2 overflow-y-auto p-4 h-[650px]">
             {isLoadingFeed && (
-              <div className="w-2/3 md:w-full  bg-gray-200">
+              <div className="w-80 md:w-full  bg-gray-200">
                 <div className="w-full bg-gray-200 ">
                   <div className="p-20 bg-white border border-primary rounded-md">
                     <div className="flex">
@@ -409,7 +409,7 @@ function BillsFeed() {
             ))}
           </div>
         </div>
-        <div className="w-full justify-self-start  p-2 md:w-2/6 overflow-y-auto bg-white rounded-lg shadow-md border border-gray-300 mt-4 md:mt-0">
+        <div className="w-full  p-2 md:w-2/6 overflow-y-auto bg-white rounded-lg shadow-md border border-gray-300 mt-4 md:mt-0">
       
  
             <InterestingBills setBills={setBills} bills={bills}/>
