@@ -9,8 +9,11 @@ function Search() {
   function handleKeyPress(e) {
     if (e.key === "Enter") {
       setSearchTerm(e.target.value);
+      setClickedSearchTerm("")
+      setInputSearchTerm("")
     } else {
       setClickedSearchTerm(e.target.value);
+      
     }
   }
 
@@ -58,16 +61,16 @@ function Search() {
         </div>
 
         {clickedSearchTerm && (
-          <div className=" absolute z-10 mt-4 bg-white  divide-gray-100 rounded-lg shadow w-50 dark:bg-gray-200">
+          <div className=" absolute z-10 mt-2 bg-white w-60 divide-gray-100 rounded-lg shadow w-50 dark:bg-gray-200">
             <div className="text-center">
               <div className="text-gray-800 cursor-pointer">
-                תוצאות עבור: {clickedSearchTerm}
+                תוצאות עבור: {inputSearchTerm}
               </div>
               <button
                 className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                onClick={() => handleClickSearch(clickedSearchTerm)}
+                onClick={() => handleClickSearch(inputSearchTerm)}
               >
-                חפש את "{clickedSearchTerm}"
+                חפש את "{inputSearchTerm}"
               </button>
             </div>
           </div>
