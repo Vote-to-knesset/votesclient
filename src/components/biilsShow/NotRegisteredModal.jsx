@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { GoogleLogin } from "@react-oauth/google";
 import { useNavigate } from 'react-router-dom';
 import useUserDetails from '../../../atoms/atomUser.js';
+import axios from 'axios';
 const NotRegisteredModal = ({setShowModal}) => {
 //   const [showModal, setShowModal] = useState(true);
 const [userDetails, setUserDetails] = useUserDetails();
