@@ -14,21 +14,23 @@ import MainApp from "./components/sign-up/MainApp.jsx";
 import BillStatistic from "./components/biilsShow/BillStatistic.jsx";
 import VoteDetails from "./components/biilsShow/VoteDetails.jsx";
 import UserZone from "./components/biilsShow/UserZone.jsx";
-function App() {
-  const [searchTerm, setSearchTerm] = useState("");
+import CivilBillsList from "./components/biilsShow/CivilBillsList.jsx";
+import BillsNFeed from "./components/biilsShow/BillsNFeed.jsx";
 
+
+function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/">
-        <Route index element={<LoginEntry />} />
+        <Route index element={<BillsNFeed />} />
         <Route path="login" element={<LoginEntry />} />
         <Route path="billsFeed">
           <Route index element={<BillsFeed />} />
           <Route path="votedata" element={<UserZone />} />
 
-          {/* Nested route for StatisticPage */}
           <Route path="statistic" element={<BillStatistic />} />
         </Route>
+        <Route path="civilbills" element={<CivilBillsList/>}/>
         <Route path="choice" element={<MainApp />} />
       </Route>
     )
