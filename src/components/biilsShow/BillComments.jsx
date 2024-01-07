@@ -289,7 +289,7 @@ function BillComment({ billId, billName, onClose }) {
                   fill="currentColor"
                   height="3em"
                   width="3em"
-                  color="gray"
+                  color="black"
                 >
                   <path
                     transform="scale(-1, 1) translate(-24, 0)"

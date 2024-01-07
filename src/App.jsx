@@ -6,6 +6,8 @@ import {
   Route,
   createRoutesFromElements,
 } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 import { useBills, useSelectedBills } from "../atoms/atomBills.js";
 import dbTest from "../db/dbTest.js";
 import LoginEntry from "./components/connctWebPages/LoginEntry.jsx";
@@ -16,6 +18,10 @@ import VoteDetails from "./components/biilsShow/VoteDetails.jsx";
 import UserZone from "./components/biilsShow/UserZone.jsx";
 import CivilBillsList from "./components/biilsShow/CivilBillsList.jsx";
 import BillsNFeed from "./components/biilsShow/BillsNFeed.jsx";
+
+
+
+const queryClient = new QueryClient();
 
 
 function App() {
@@ -37,9 +43,13 @@ function App() {
   );
 
   return (
+    <QueryClientProvider client={queryClient}>
+
     <div>
       <RouterProvider router={router} />
     </div>
+    {/* <ReactQueryDevtools initialIsOpen={false} />  */}
+    </QueryClientProvider>
   );
 }
 
