@@ -100,10 +100,10 @@ const Maching = () => {
     
       return (
         <>
-          <div dir="rtl" className=" md:fixed bg-white shadow-md rounded mb-2 my-4 p-2 ">
+          <div dir="rtl" className="  bg-white shadow-md rounded mb-2 my-4 p-4 ">
             <div className="max-w-4xl mx-auto p-2 text-center ">
               <h2 className="text-2xl mb-2">אחוז ההתאמה שלך למפלגות:</h2>
-              <div className="grid grid-cols-1  gap-4">
+              <div className="grid grid-cols-1  gap-2 ">
                 {sortedParties.map((party) => (
                   <div
                     key={party}

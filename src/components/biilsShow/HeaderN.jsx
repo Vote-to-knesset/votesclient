@@ -8,33 +8,8 @@ import Notifications from "./Notifications";
 import axios from "axios";
 import { useLawsBills } from "../../../atoms/atomBills";
 
-async function getNotifications() {
-  try {
-    const token = localStorage.getItem("tokenVote");
 
-    if (token) {
-      const response = await axios.get(
-        "https://sever-users-node-js.vercel.app/votes/notifications",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (response.status === 200) {
-        return response.data;
-      } else {
-        console.error("Failed to fetch note");
-      }
-    } else {
-      console.error("Token not found");
-    }
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-function Header() {
+function HeaderN() {
   const [showSearchBar, setShowSearchBar] = useState(false);
 
   const [showUserDetails, setShowUserDetails] = useState(false);
@@ -44,20 +19,7 @@ function Header() {
   const navigateCivilBills = useNavigate();
   const navigatBills = useNavigate();
 
-  useLayoutEffect(() => {
-    const fetchData = async () => {
-      try {
-        const fetchedData = await getNotifications();
-        setVoteData(fetchedData.data);
 
-        voteData && setServerMessage("חוקים שהצבעת עליהם עלו להצבעה בכנסת");
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const toggleSearchBar = () => {
     setShowSearchBar(!showSearchBar);
@@ -117,37 +79,8 @@ function Header() {
             </g>
           </svg>
         </button>
-        <button
-          onClick={openNote}
-          className="relative inline-flex items-center  text-sm font-medium text-center text-white  "
-        >
-          {notifications && <Notifications msg={serverMessage} />}
-          <svg
-            className="bg-gray-300 hover:bg-gray-400 p-1.5 rounded-full transition duration-300 ease-in-out"
-            viewBox="0 0 512 512"
-            fill="currentColor"
-            height="2.5em"
-            width="2.5em"
-            color="black"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            {/* Original path */}
-            <path
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={32}
-              d="M427.68 351.43C402 320 383.87 304 383.87 217.35 383.87 138 343.35 109.73 310 96c-4.43-1.82-8.6-6-9.95-10.55C294.2 65.54 277.8 48 256 48s-38.21 17.55-44 37.47c-1.35 4.6-5.52 8.71-9.95 10.53-33.39 13.75-73.87 41.92-73.87 121.35C128.13 304 110 320 84.32 351.43 73.68 364.45 83 384 101.61 384h308.88c18.51 0 27.77-19.61 17.19-32.57zM320 384v16a64 64 0 01-128 0v-16"
-            />
-          </svg>
-          {serverMessage && (
-            <div>
-              <span className="sr-only">Notifications</span>
-              <div className="absolute inline-flex items-center justify-center w-3 h-3 text-xs   text-white bg-red-500  border-white rounded-full -top-0.5 -end-1 "></div>
-            </div>
-          )}
-        </button>
+        
+         
 
         <div className="flex items-center flex-grow md:hidden">
           {showSearchBar ? (
@@ -238,4 +171,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default HeaderN;

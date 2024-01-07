@@ -10,11 +10,7 @@ import { useStatistic } from "../../../atoms/atomBills.js";
 import qs from "query-string";
 import InterestingBills from "./InterestingBills.jsx";
 import NotRegisteredModal from "./NotRegisteredModal.jsx";
-function calculateVoteData(bill) {
-  const inFavor = bill.in_favor;
-  const against = bill.against;
-  return { in_favor: inFavor, against: against };
-}
+import HeaderN from "./HeaderN.jsx";
 
 async function getBills(skip) {
   try {
@@ -28,38 +24,12 @@ async function getBills(skip) {
   }
 }
 
-async function getSelectedBills() {
-  try {
-    const token = localStorage.getItem("tokenVote");
-
-    if (token) {
-      const response = await axios.get(
-        "https://sever-users-node-js.vercel.app/votes/selectedBills",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (response.status === 200) {
-        console.log(response);
-        return response.data.data || [];
-      } else {
-        console.error("Failed to fetch selected bills");
-      }
-    } else {
-      console.error("Token not found");
-    }
-  } catch (error) {
-    console.error("Error fetching selected bills:", error);
-  }
-}
 
 function useStatisticNavigation() {
   return useNavigate();
 }
 
-function BillsFeed() {
+function BillsNFeed() {
   const [comment1, setComment1] = useState("");
   const [openComments, setOpenComments] = useState({});
   const [openStatistic, setopenStatistic] = useState({});
@@ -72,39 +42,26 @@ function BillsFeed() {
   const [isLoadingFeed, setIsLoadingFeed] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [NotRegistered,setNotRegistered] = useState(false)
+  const navigateBills = useNavigate()
 
   useLayoutEffect(() => {
+
+    const token = localStorage.getItem("tokenVote")
+    if(token){
+        navigateBills('/billsFeed')
+    }
     if (!isMounted) {
       setIsLoadingFeed(true);
       const fetchData = async () => {
-        const selectedData = await getSelectedBills();
-        setSelecteBills(selectedData);
+        
 
         const billsData = await getBills(skip);
-        let sortedBills = [];
-        let selectedBills = [];
-        let unselectedBills = [];
-
-        if (selectedData.length > 0) {
-          const selectedSet = new Set(selectedData);
-          billsData.forEach((bill) => {
-            if (selectedSet.has(bill.BillID)) {
-              selectedBills.push(bill);
-            } else {
-              unselectedBills.push(bill);
-            }
-          });
-          sortedBills = [...unselectedBills, ...selectedBills];
-          setIsLoadingFeed(false);
-        } else {
-          sortedBills = billsData;
-          setIsLoadingFeed(false);
-        }
-        if (selectedBills.length >= 39) {
-          handleLoadMore();
-        } else {
-          setBills(sortedBills);
-        }
+        
+      
+       
+        setBills(billsData);
+        setIsLoadingFeed(false)
+        
       };
 
       fetchData();
@@ -134,90 +91,20 @@ function BillsFeed() {
     fetchData();
   }, [searchTerm]);
 
-  const submitVoteToServer = async (billId, vote, token) => {
-
-  
-    try {
-      const response = await axios.post(
-        "https://sever-users-node-js.vercel.app/votes/submitVote",
-        { billId, vote },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        console.log("Vote submitted successfully");
-      } else {
-        console.error("Failed to submit vote");
-      }
-    } catch (error) {
-      console.error("Error submitting vote:", error);
-    }
-  };
 
   const handleVoteClickFor = (bill) => {
-    bill.in_favor += 1;
-    setSbills([...Sbills, bill]);
-
-    const token = localStorage.getItem("tokenVote");
-    submitVoteToServer(bill.BillID, "in_favor", token);
+    setNotRegistered(true)
   };
 
   const handleVoteClickAga = (bill) => {
-    bill.against += 1;
-
-    setSbills([...Sbills, bill]);
-
-    const token = localStorage.getItem("tokenVote");
-    submitVoteToServer(bill.BillID, "against", token);
+    setNotRegistered(true)
   };
 
   const toggleComment = (bill) => {
-    const billID = bill.BillID;
-    setComment1(billID);
-
-    setOpenComments((prevComments) => ({
-      ...prevComments,
-      [billID]: !prevComments[billID],
-    }));
+    setNotRegistered(true)
   };
-  // const filteredBills = bills.filter(
-  //   (bill) =>
-  //     (bill.name && bill.name.includes(searchTerm)) ||
-  //     (bill.Name && bill.Name.includes(searchTerm))
-  // );
 
-  const handleLoadMore = async () => {
-    const newSkip = skip + 40;
-    setSkip(newSkip);
-    try {
-      const moreBillsData = await getBills(newSkip);
-      const selectedData = await getSelectedBills();
-      let sortedBills = [];
-      let selectedBills = [];
-      let unselectedBills = [];
 
-      const selectedSet = new Set(selectedData);
-
-      moreBillsData.forEach((bill) => {
-        if (selectedSet.has(bill.BillID) || Sbills.includes(bill)) {
-          selectedBills.push(bill);
-        } else {
-          unselectedBills.push(bill);
-        }
-      });
-
-      sortedBills = [...unselectedBills, ...selectedBills];
-
-      setBills(sortedBills);
-    } catch (error) {
-      console.error("Error fetching more bills:", error);
-    }
-  };
 
   const handleClickOutside = () => {
     setOpenComments({});
@@ -235,7 +122,7 @@ function BillsFeed() {
 
   return (
     <div>
-      <Header />
+      <HeaderN />
 
       <div className="flex flex-col  md:flex-row justify-center items-center h-full  bg-gray-200">
         <div className="w-full md:w-3/5 flex flex-col justify-center items-start ">
@@ -364,9 +251,7 @@ function BillsFeed() {
                     התפלגות ההצבעות לפי מפלגות
                   </button>
                 </div>
-                {selecteBills.includes(bill.BillID) || Sbills.includes(bill) ? (
-                  <GraphVotes voteData={calculateVoteData(bill)} />
-                ) : (
+               
                   <div className="flex  items-center mt-4">
                     <button
                       onClick={() => handleVoteClickFor(bill, "in_favor")}
@@ -381,7 +266,7 @@ function BillsFeed() {
                       נגד
                     </button>
                   </div>
-                )}
+                
                 <p>סך כל ההצבעות : {bill.in_favor + bill.against}</p>
 
                 <div className="flex justify-center border-t border-gray-300 mt-6 ">
@@ -410,7 +295,7 @@ function BillsFeed() {
               </div>
             ))}
           </div>
-         
+         {NotRegistered && <NotRegisteredModal setShowModal={setNotRegistered}/>}
         </div>
         <div className=" hidden lg:block p-2 md:w-2/6 overflow-y-auto bg-white rounded-lg shadow-md border border-gray-300 ml-4 md:mt-8">
           <InterestingBills setBills={setBills} bills={bills} />
@@ -422,4 +307,4 @@ function BillsFeed() {
     </div>
   );
 }
-export default BillsFeed;
+export default BillsNFeed;

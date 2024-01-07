@@ -1,25 +1,24 @@
 import { useSearchTerm, useBills } from "../../../atoms/atomBills";
-import { useState } from 'react'; // Import useState hook
-
+import { useState } from "react"; // Import useState hook
 
 function Search() {
   const [searchTerm, setSearchTerm] = useSearchTerm();
-  const [clickedSearchTerm, setClickedSearchTerm] = useState('');
-  const [inputSearchTerm, setInputSearchTerm] = useState(''); // State to store input search term
+  const [clickedSearchTerm, setClickedSearchTerm] = useState("");
+  const [inputSearchTerm, setInputSearchTerm] = useState(""); // State to store input search term
 
   function handleKeyPress(e) {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       setSearchTerm(e.target.value);
-      
-    }
-    else{
+      setClickedSearchTerm("")
+      setInputSearchTerm("")
+    } else {
       setClickedSearchTerm(e.target.value);
-
+      
     }
   }
 
   function handleClickSearch() {
-    setSearchTerm(inputSearchTerm); 
+    setSearchTerm(inputSearchTerm);
     setClickedSearchTerm(inputSearchTerm);
   }
 
@@ -37,7 +36,11 @@ function Search() {
             onChange={(e) => setInputSearchTerm(e.target.value)}
             required
           />
-          <button type="submit" className="absolute right-0 top-0 mt-3 mr-4" onClick={handleClickSearch}>
+          <button
+            type="submit"
+            className="absolute right-0 top-0 mt-3 mr-4"
+            onClick={handleClickSearch}
+          >
             <svg
               className="h-4 w-4 fill-current"
               xmlns="http://www.w3.org/2000/svg"
@@ -47,7 +50,7 @@ function Search() {
               x="0px"
               y="0px"
               viewBox="0 0 56.966 56.966"
-              style={{ enableBackground: 'new 0 0 56.966 56.966' }}
+              style={{ enableBackground: "new 0 0 56.966 56.966" }}
               xmlSpace="preserve"
               width="512px"
               height="512px"
@@ -56,22 +59,25 @@ function Search() {
             </svg>
           </button>
         </div>
+
         {clickedSearchTerm && (
-          <div className="mt-4 text-gray-800 cursor-pointer">
-            תוצאות עבור: {clickedSearchTerm}
+          <div className=" absolute z-10 mt-2 bg-white w-60 divide-gray-100 rounded-lg shadow w-50 dark:bg-gray-200">
+            <div className="text-center">
+              <div className="text-gray-800 cursor-pointer">
+                תוצאות עבור: {inputSearchTerm}
+              </div>
+              <button
+                className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                onClick={() => handleClickSearch(inputSearchTerm)}
+              >
+                חפש את "{inputSearchTerm}"
+              </button>
+            </div>
           </div>
-        )}
-        {clickedSearchTerm && (
-          <button className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={() => handleClickSearch(clickedSearchTerm)}>
-            חפש את "{clickedSearchTerm}"
-          </button>
         )}
       </div>
     </>
   );
-  
- 
 }
 
 export default Search;

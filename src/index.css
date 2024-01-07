@@ -82,3 +82,18 @@ html{
   color: white;
   transition: background-color 0.3s ease;
 }
+/* For small devices (e.g., phones) */
+@media (max-width: 767px) {
+  /* Adjust styles here */
+  .bill-feed {
+    height: auto; /* Instead of fixed height */
+    overflow-y: scroll; /* Enable vertical scroll if needed */
+  }
+  /* Other responsive styles */
+}
+
+/* For medium to large devices (e.g., tablets, desktops) */
+@media (min-width: 768px) {
+  /* Adjust styles here */
+}
+

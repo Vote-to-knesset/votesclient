@@ -184,7 +184,7 @@ const VoteDetails = () => {
 
   return (
     < >
-    <div className="bg-white shadow-md rounded mb-2 my-4 p-2">
+    <div className="bg-white shadow-md rounded mb-2 my-4 p-2 overflow-y-auto">
     <h2 dir="rtl" className="text-2xl mb-2">חוקים שהצבעת עליהם :</h2>
       {voteDataArray.map((voteData, dataIndex) => (
         <div className="overflow-scroll">
