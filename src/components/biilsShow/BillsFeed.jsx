@@ -100,7 +100,7 @@ function BillsFeed() {
           sortedBills = billsData;
           setIsLoadingFeed(false);
         }
-        if (selectedBills.length >= 49) {
+        if (selectedBills.length >= 39) {
           handleLoadMore();
         } else {
           setBills(sortedBills);
@@ -192,7 +192,7 @@ function BillsFeed() {
   // );
 
   const handleLoadMore = async () => {
-    const newSkip = skip + 50;
+    const newSkip = skip + 40;
     setSkip(newSkip);
     try {
       const moreBillsData = await getBills(newSkip);
