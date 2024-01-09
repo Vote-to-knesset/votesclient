@@ -25,6 +25,7 @@ const CivilBillsList = () => {
           },
         }
       );
+      console.log(response);
       return response.data.data;
     }
   );
