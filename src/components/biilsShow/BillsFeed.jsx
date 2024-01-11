@@ -72,6 +72,8 @@ function BillsFeed() {
   const [isLoadingFeed, setIsLoadingFeed] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [NotRegistered,setNotRegistered] = useState(false)
+  const [hoveredBill, setHoveredBill] = useState([]);
+
 
   useLayoutEffect(() => {
     if (!isMounted) {
@@ -185,11 +187,9 @@ function BillsFeed() {
       [billID]: !prevComments[billID],
     }));
   };
-  // const filteredBills = bills.filter(
-  //   (bill) =>
-  //     (bill.name && bill.name.includes(searchTerm)) ||
-  //     (bill.Name && bill.Name.includes(searchTerm))
-  // );
+  const handleBillHover = (billID) => {
+    setHoveredBill(billID);
+  };
 
   const handleLoadMore = async () => {
     const newSkip = skip + 40;
@@ -300,6 +300,7 @@ function BillsFeed() {
               <div
                 key={bill.BillID}
                 className=" bg-white rounded-lg shadow-md p-6 pb-2 mb-8"
+                onMouseEnter={() => handleBillHover(bill.BillID)}
               >
                 <h3 className="text-xl font-semibold mb-2">
                   {bill.name || bill.Name}
