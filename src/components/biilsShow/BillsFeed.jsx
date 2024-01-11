@@ -42,7 +42,7 @@ async function getSelectedBills() {
         }
       );
       if (response.status === 200) {
-        console.log(response);
+
         return response.data.data || [];
       } else {
         console.error("Failed to fetch selected bills");
@@ -79,7 +79,9 @@ function BillsFeed() {
     if (!isMounted) {
       setIsLoadingFeed(true);
       const fetchData = async () => {
-        const selectedData = await getSelectedBills();
+        let selectedData = await getSelectedBills();
+        selectedData = selectedData[0]
+
         setSelecteBills(selectedData);
 
         const billsData = await getBills(skip);
@@ -97,16 +99,15 @@ function BillsFeed() {
             }
           });
           sortedBills = [...unselectedBills, ...selectedBills];
+ 
+          
           setIsLoadingFeed(false);
+          setBills(sortedBills);
         } else {
           sortedBills = billsData;
           setIsLoadingFeed(false);
         }
-        if (selectedBills.length >= 39) {
-          handleLoadMore();
-        } else {
-          setBills(sortedBills);
-        }
+        setBills(sortedBills);
       };
 
       fetchData();
@@ -188,7 +189,7 @@ function BillsFeed() {
     }));
   };
   const handleBillHover = (billID) => {
-    setHoveredBill(billID);
+    setHoveredBill([...hoveredBill,billID]);
   };
 
   const handleLoadMore = async () => {
