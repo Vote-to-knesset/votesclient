@@ -13,9 +13,12 @@ import NotRegisteredModal from "./NotRegisteredModal.jsx";
 import HeaderN from "./HeaderN.jsx";
 
 async function getBills(skip) {
+
+
+  const selectedHover = []
   try {
-    const response = await axios.get(
-      `https://kns-data-votes.onrender.com/api/data_bills?skip=${skip}`
+    const response = await axios.post(
+      `https://kns-data-votes.onrender.com/api/data_bills?skip=${skip}`,{selectedHover:selectedHover}
     );
     return response.data;
   } catch (error) {

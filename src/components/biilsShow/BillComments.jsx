@@ -20,7 +20,6 @@ const calculateTimeElapsed = (timestamp) => {
 
 async function getBillsComments(billId) {
   try {
-    console.log(billId);
     const token = localStorage.getItem("tokenVote");
     if (token) {
       const response = await axios.get(

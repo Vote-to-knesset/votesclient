@@ -16,10 +16,13 @@ function calculateVoteData(bill) {
   return { in_favor: inFavor, against: against };
 }
 
-async function getBills(skip) {
+async function getBills(skip, selectedHover) {
+  console.log(skip,selectedHover);
+  const data = { selectedHover: selectedHover };
   try {
-    const response = await axios.get(
-      `https://kns-data-votes.onrender.com/api/data_bills?skip=${skip}`
+    const response = await axios.post(
+      `https://kns-data-votes.onrender.com/api/data_bills?skip=${skip}`,
+     data
     );
     return response.data;
   } catch (error) {
@@ -27,6 +30,31 @@ async function getBills(skip) {
     return [];
   }
 }
+
+const sendHoverBills = async (bills) => {
+  try {
+    const token = localStorage.getItem("tokenVote");
+
+    const response = await axios.post(
+      "https://sever-users-node-js.vercel.app/votes/sethoverbills",
+      { hoveredBill: bills },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.status === 200) {
+      console.log("send hover bills ");
+    } else {
+      console.error("Failed to send hover bills");
+    }
+  } catch (error) {
+    console.error("Error submitting hover:", error);
+  }
+};
 
 async function getSelectedBills() {
   try {
@@ -42,7 +70,6 @@ async function getSelectedBills() {
         }
       );
       if (response.status === 200) {
-
         return response.data.data || [];
       } else {
         console.error("Failed to fetch selected bills");
@@ -71,20 +98,25 @@ function BillsFeed() {
   const [skip, setSkip] = useState(0);
   const [isLoadingFeed, setIsLoadingFeed] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
-  const [NotRegistered,setNotRegistered] = useState(false)
+  const [NotRegistered, setNotRegistered] = useState(false);
   const [hoveredBill, setHoveredBill] = useState([]);
 
+  if (hoveredBill.length >= 10) {
+    sendHoverBills(hoveredBill);
+    setHoveredBill([]);
+  }
 
   useLayoutEffect(() => {
     if (!isMounted) {
       setIsLoadingFeed(true);
       const fetchData = async () => {
         let selectedData = await getSelectedBills();
-        selectedData = selectedData[0]
+        const selectedHover = [].concat(...selectedData);
+        selectedData = selectedData[0];
 
         setSelecteBills(selectedData);
 
-        const billsData = await getBills(skip);
+        const billsData = await getBills(skip, selectedHover);
         let sortedBills = [];
         let selectedBills = [];
         let unselectedBills = [];
@@ -99,8 +131,7 @@ function BillsFeed() {
             }
           });
           sortedBills = [...unselectedBills, ...selectedBills];
- 
-          
+
           setIsLoadingFeed(false);
           setBills(sortedBills);
         } else {
@@ -138,8 +169,6 @@ function BillsFeed() {
   }, [searchTerm]);
 
   const submitVoteToServer = async (billId, vote, token) => {
-
-  
     try {
       const response = await axios.post(
         "https://sever-users-node-js.vercel.app/votes/submitVote",
@@ -189,7 +218,7 @@ function BillsFeed() {
     }));
   };
   const handleBillHover = (billID) => {
-    setHoveredBill([...hoveredBill,billID]);
+    setHoveredBill([...hoveredBill, billID]);
   };
 
   const handleLoadMore = async () => {
@@ -412,7 +441,6 @@ function BillsFeed() {
               </div>
             ))}
           </div>
-         
         </div>
         <div className=" hidden lg:block p-2 md:w-2/6 overflow-y-auto bg-white rounded-lg shadow-md border border-gray-300 ml-4 md:mt-8">
           <InterestingBills setBills={setBills} bills={bills} />
