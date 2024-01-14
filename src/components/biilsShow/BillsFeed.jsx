@@ -268,7 +268,7 @@ function BillsFeed() {
       <Header />
 
       <div className="flex flex-col  md:flex-row justify-center items-center h-full  bg-gray-200">
-        <div className="w-full md:w-3/5 flex flex-col justify-center items-start ">
+        <div className="w-full md:w-3/5 mt-8 md:mt-0  flex flex-col justify-center items-start ">
           <div
             dir="rtl"
             className="bill-feed md:mr-2 mt-2 overflow-y-auto p-4 h-[650px]"
