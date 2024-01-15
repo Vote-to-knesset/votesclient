@@ -27,8 +27,7 @@ const CivilBillsList = () => {
         },
       }
     );
-    console.log(response);
-    return response.data.data;
+    return response.data.data.reverse();
   });
   const addCivilBillMutation = useMutation(
     async (newBill) => {
