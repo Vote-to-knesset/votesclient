@@ -38,7 +38,7 @@ const InterestingBills = ({ setBills, bills }) => {
   return (
     
  
-    <div dir="rtl" className="w-full  container mx-auto mt-2">
+    <div dir="rtl" className="w-full max-h-screen  container mx-auto mt-2">
       <h1 className={`text-2xl font-bold mb-2 p-2 cursor-pointer `}>
         הצעות חוק שאולי יעניינו אותך
       </h1>
