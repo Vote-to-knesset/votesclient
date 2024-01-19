@@ -9,7 +9,7 @@ const UserZone = () => {
     <div className='bg-gray-200'>
       <Header />
       <div className="flex flex-col md:flex-row md:justify-center mt-6 md:mt-10">
-        <div className="flex  p-8 mt-4 md:w-max md:h-max bg-white rounded-lg shadow-md border border-gray-300 md:ml-4 overflow-y-auto">
+        <div className="flex  p-8  md:w-max md:h-max bg-white rounded-lg shadow-md border border-gray-300 md:ml-4 overflow-y-auto">
           {/* Adjust Maching component styling */}
           <Maching />
         </div>

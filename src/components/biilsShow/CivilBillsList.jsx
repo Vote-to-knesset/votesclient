@@ -6,6 +6,7 @@ import Header from "./Header";
 const CivilBillsList = () => {
   const [billVotes, setBillVotes] = useState({});
   const [userVote, setUserVote] = useState({});
+  const[newCivilBill,setNewCivilBill] = useState(false)
 
   const [formData, setFormData] = useState({
     name: "",
@@ -91,6 +92,13 @@ const CivilBillsList = () => {
       console.error("Error submitting vote:", error);
     }
   };
+  const openNewCivilBill = ()=>{
+    setNewCivilBill(!newCivilBill)
+    
+  }
+  const closeNewCivilBill =()=>{
+    setNewCivilBill(false)
+  }
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error fetching data...</p>;
 
@@ -98,9 +106,10 @@ const CivilBillsList = () => {
     <div>
       <Header />
 
-      <div className="flex flex-col  md:flex-row justify-center items-center h-full  bg-gray-200">
-        <div className="w-full md:w-3/5 mt-6 md:mt-0 flex flex-col justify-center items-start ">
+      <div  className="flex flex-col  md:flex-row justify-center items-center h-full  bg-gray-200">
+        <div onClick={closeNewCivilBill} className="w-full md:w-3/5 mt-6 md:mt-0 flex flex-col justify-center items-start ">
           <div
+
             dir="rtl"
             className="bill-feed md:mr-2 mt-2 overflow-y-auto p-4 h-[650px]"
           >
@@ -218,6 +227,43 @@ const CivilBillsList = () => {
             </div>
           </div>
         </div>
+        <div onClick={openNewCivilBill} className="md:hidden fixed left-4 top-3/4 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md">
+  <svg fill="none" viewBox="0 0 24 24" height="2em" width="2em" className="text-blue-500">
+    <path fill="currentColor" fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12zm10-8a8 8 0 100 16 8 8 0 000-16z" clip-rule="evenodd"/>
+    <path fill="currentColor" fill-rule="evenodd" d="M13 7a1 1 0 10-2 0v4H7a1 1 0 100 2h4v4a1 1 0 102 0v-4h4a1 1 0 100-2h-4V7z" clip-rule="evenodd"/>
+  </svg>
+</div>
+{newCivilBill && <div
+          dir="rtl"
+          className=" fixed  w-3/4 h-1/2 flex items-center justify-center  z-50 p-2 overflow-y-auto bg-white rounded-lg shadow-md border border-gray-300 "
+        >
+          <form onSubmit={handleSubmit} className="mb-8">
+            <p> שם ההצעת חוק יכלול שם קליט וברור</p>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="שם ההצעת חוק"
+              className="border border-gray-400 rounded-md p-2 mt-2 mb-2 mr-2 w-full"
+            />
+            <p>הסבר בקצרה על החוק המוצע :</p>
+            <input
+              type="text"
+              name="summery"
+              value={formData.summery}
+              onChange={handleChange}
+              placeholder="סכם את הצעת החוק"
+              className="border border-gray-400 rounded-md p-2 mt-2 mb-2 mr-2 w-full"
+            />
+            <button
+              type="submit"
+              className="bg-blue-500 text-white px-4 py-2 mt-2 mr-2  rounded-md hover:bg-blue-600"
+            >
+              פרסם
+            </button>
+          </form>
+        </div> }
         <div
           dir="rtl"
           className=" hidden lg:block p-2 md:w-2/6 overflow-y-auto bg-white rounded-lg shadow-md border border-gray-300 ml-4 md:mt-8"

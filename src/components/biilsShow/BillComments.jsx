@@ -210,7 +210,7 @@ function BillComment({ billId, billName, onClose }) {
 
   return (
     <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="w-5/6 h-full md:w-2/4 md:h-4/6  bg-white rounded-lg shadow-lg relative">
+      <div className="w-5/6 h-3/4 md:w-2/4 md:h-4/6  bg-white rounded-lg shadow-lg relative">
         <div className="flex items-center">
           <div
             className="bg-gray-200 rounded-full p-2 m-4 cursor-pointer"
