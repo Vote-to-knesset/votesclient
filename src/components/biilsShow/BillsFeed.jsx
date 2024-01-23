@@ -121,6 +121,11 @@ function BillsFeed() {
         let selectedBills = [];
         let unselectedBills = [];
 
+        const lastTwoBills = billsData.slice(-2);
+
+
+        billsData.splice(-2);
+
         if (selectedData.length > 0) {
           const selectedSet = new Set(selectedData);
           billsData.forEach((bill) => {
@@ -130,7 +135,7 @@ function BillsFeed() {
               unselectedBills.push(bill);
             }
           });
-          sortedBills = [...unselectedBills, ...selectedBills];
+          sortedBills = [...lastTwoBills,...unselectedBills, ...selectedBills];
 
           setIsLoadingFeed(false);
           setBills(sortedBills);
