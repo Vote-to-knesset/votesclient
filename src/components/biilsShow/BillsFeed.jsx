@@ -16,10 +16,13 @@ function calculateVoteData(bill) {
   return { in_favor: inFavor, against: against };
 }
 
-async function getBills(skip) {
+async function getBills(skip, selectedHover) {
+  console.log(skip,selectedHover);
+  const data = { selectedHover: selectedHover };
   try {
-    const response = await axios.get(
-      `https://kns-data-votes.onrender.com/api/data_bills?skip=${skip}`
+    const response = await axios.post(
+      `https://kns-data-votes.onrender.com/api/data_bills?skip=${skip}`,
+     data
     );
     return response.data;
   } catch (error) {
@@ -27,6 +30,31 @@ async function getBills(skip) {
     return [];
   }
 }
+
+const sendHoverBills = async (bills) => {
+  try {
+    const token = localStorage.getItem("tokenVote");
+
+    const response = await axios.post(
+      "https://sever-users-node-js.vercel.app/votes/sethoverbills",
+      { hoveredBill: bills },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.status === 200) {
+      console.log("send hover bills ");
+    } else {
+      console.error("Failed to send hover bills");
+    }
+  } catch (error) {
+    console.error("Error submitting hover:", error);
+  }
+};
 
 async function getSelectedBills() {
   try {
@@ -42,7 +70,6 @@ async function getSelectedBills() {
         }
       );
       if (response.status === 200) {
-        console.log(response);
         return response.data.data || [];
       } else {
         console.error("Failed to fetch selected bills");
@@ -71,19 +98,33 @@ function BillsFeed() {
   const [skip, setSkip] = useState(0);
   const [isLoadingFeed, setIsLoadingFeed] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
-  const [NotRegistered,setNotRegistered] = useState(false)
+  const [NotRegistered, setNotRegistered] = useState(false);
+  const [hoveredBill, setHoveredBill] = useState([]);
+
+  if (hoveredBill.length >= 10) {
+    sendHoverBills(hoveredBill);
+    setHoveredBill([]);
+  }
 
   useLayoutEffect(() => {
     if (!isMounted) {
       setIsLoadingFeed(true);
       const fetchData = async () => {
-        const selectedData = await getSelectedBills();
+        let selectedData = await getSelectedBills();
+        const selectedHover = [].concat(...selectedData);
+        selectedData = selectedData[0];
+
         setSelecteBills(selectedData);
 
-        const billsData = await getBills(skip);
+        const billsData = await getBills(skip, selectedHover);
         let sortedBills = [];
         let selectedBills = [];
         let unselectedBills = [];
+
+        const lastTwoBills = billsData.slice(-2);
+
+
+        billsData.splice(-2);
 
         if (selectedData.length > 0) {
           const selectedSet = new Set(selectedData);
@@ -94,17 +135,15 @@ function BillsFeed() {
               unselectedBills.push(bill);
             }
           });
-          sortedBills = [...unselectedBills, ...selectedBills];
+          sortedBills = [...lastTwoBills,...unselectedBills, ...selectedBills];
+
           setIsLoadingFeed(false);
+          setBills(sortedBills);
         } else {
           sortedBills = billsData;
           setIsLoadingFeed(false);
         }
-        if (selectedBills.length >= 39) {
-          handleLoadMore();
-        } else {
-          setBills(sortedBills);
-        }
+        setBills(sortedBills);
       };
 
       fetchData();
@@ -135,8 +174,6 @@ function BillsFeed() {
   }, [searchTerm]);
 
   const submitVoteToServer = async (billId, vote, token) => {
-
-  
     try {
       const response = await axios.post(
         "https://sever-users-node-js.vercel.app/votes/submitVote",
@@ -185,11 +222,9 @@ function BillsFeed() {
       [billID]: !prevComments[billID],
     }));
   };
-  // const filteredBills = bills.filter(
-  //   (bill) =>
-  //     (bill.name && bill.name.includes(searchTerm)) ||
-  //     (bill.Name && bill.Name.includes(searchTerm))
-  // );
+  const handleBillHover = (billID) => {
+    setHoveredBill([...hoveredBill, billID]);
+  };
 
   const handleLoadMore = async () => {
     const newSkip = skip + 40;
@@ -234,17 +269,17 @@ function BillsFeed() {
   };
 
   return (
-    <div>
+    <div className="flex flex-col  bg-gray-200 min-w-full ">
       <Header />
 
-      <div className="flex flex-col  md:flex-row justify-center items-center h-full  bg-gray-200">
-        <div className="w-full md:w-3/5 flex flex-col justify-center items-start ">
+      <div className="flex flex-col md:flex-row w-full justify-center items-stretch flex-1">
+        <div className="w-full md:w-3/5 mt-8 md:mt-0 p-2 flex flex-col justify-center items-start ">
           <div
             dir="rtl"
-            className="bill-feed md:mr-2 mt-2 overflow-y-auto p-4 h-[650px]"
+            className="bill-feed m-0 md:mr-2 mt-0  overflow-y-auto p-4 h-[650px]"
           >
             {isLoadingFeed && (
-              <div className="w-80 md:w-full  bg-gray-200">
+              <div className="w-80 md:w-full  bg-gray-200 ">
                 <div className="w-full bg-gray-200 ">
                   <div className="p-20 bg-white border border-primary rounded-md">
                     <div className="flex">
@@ -300,6 +335,7 @@ function BillsFeed() {
               <div
                 key={bill.BillID}
                 className=" bg-white rounded-lg shadow-md p-6 pb-2 mb-8"
+                onMouseEnter={() => handleBillHover(bill.BillID)}
               >
                 <h3 className="text-xl font-semibold mb-2">
                   {bill.name || bill.Name}
@@ -410,9 +446,8 @@ function BillsFeed() {
               </div>
             ))}
           </div>
-         
         </div>
-        <div className=" hidden lg:block p-2 md:w-2/6 overflow-y-auto bg-white rounded-lg shadow-md border border-gray-300 ml-4 md:mt-8">
+        <div className=" hidden lg:block w-full md:w-2/6 p-2 overflow-y-auto bg-white rounded-lg shadow-md border border-gray-300 ml-4 mt-4">
           <InterestingBills setBills={setBills} bills={bills} />
         </div>
       </div>

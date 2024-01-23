@@ -9,11 +9,11 @@ const UserZone = () => {
     <div className='bg-gray-200'>
       <Header />
       <div className="flex flex-col md:flex-row md:justify-center mt-6 md:mt-10">
-        <div className="flex md:w-max md:h-max bg-white rounded-lg shadow-md border border-gray-300 md:ml-4 overflow-y-auto">
+        <div className="flex  p-8  md:w-max md:h-max bg-white rounded-lg shadow-md border border-gray-300 md:ml-4 overflow-y-auto">
           {/* Adjust Maching component styling */}
           <Maching />
         </div>
-        <div className="w-full lg:w-2/4 md:ml-4 md:mt-0 mt-4 px-4 md:px-8 py-4 md:py-6 bg-white rounded-lg shadow-md border border-gray-300 overflow-y-auto">
+        <div className="w-full lg:w-2/4  md:ml-4 md:mt-0 mt-4 px-4 md:px-8 py-4 md:py-6 bg-white rounded-lg shadow-md border border-gray-300 overflow-y-auto">
           {/* Adjust VoteDetails component styling */}
           <VoteDetails />
         </div>

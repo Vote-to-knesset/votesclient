@@ -28,7 +28,6 @@ function HeaderN() {
   };
 
   const openUserDetails = () => {
-    setShowUserDetails(!showUserDetails);
     setNotifications(false);
   };
 
@@ -38,11 +37,11 @@ function HeaderN() {
   };
 
   const hendelCivilClick =()=>{
-    navigateCivilBills('/civilbills')
+
   }
 
   const returnFeed = () => {
-    navigatBills("/billsFeed");
+
   };
 
   return (
